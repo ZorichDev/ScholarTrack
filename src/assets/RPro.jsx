@@ -571,6 +571,7 @@
 
 
 import React, { useState, useEffect } from 'react';
+import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone } from 'lucide-react';
 
 export default function ScholarTrack() {
@@ -739,7 +740,7 @@ ACTION REQUIRED: Follow up with student for consultation.
     
     setChatMessages([...chatMessages, 
       { type: 'user', text: chatInput },
-      { type: 'bot', text: 'Thank you for your message. An R-Pro counselor will respond shortly. For immediate assistance, please book a consultation session.' }
+      { type: 'bot', text: 'Thank you for your message. An R-Pro counselor will respond shortly. For immediate assistance you can chat us on 09069246577, please book a consultation session.' }
     ]);
     setChatInput('');
   };
@@ -747,18 +748,23 @@ ACTION REQUIRED: Follow up with student for consultation.
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-red-50">
       {/* Header */}
-      <header className="bg-white shadow-md">
+      <header className="bg-black shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <GraduationCap className="w-8 h-8 text-red-600" />
+            
+                  <img 
+                   src={logo}
+                  alt="Logo" 
+                  className="w-8 h-8 object-contain"
+                />
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">R-Pro ScholarTrack</h1>
-              <p className="text-xs text-gray-600">Your Path to Global Education</p>
+              <h1 className="text-2xl font-bold text-white -800" >R-Pro ScholarTrack</h1>
+              <p className="text-xs text-red-600">Your Path to Global Education</p>
             </div>
           </div>
           <button
             onClick={() => setShowChat(!showChat)}
-            className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+            className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             <MessageCircle className="w-5 h-5" />
             <span>Chat Support</span>
@@ -772,15 +778,15 @@ ACTION REQUIRED: Follow up with student for consultation.
           <button
             onClick={() => setActiveTab('home')}
             className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
-              activeTab === 'home' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              activeTab === 'home' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-blue-200'
             }`}
           >
             Home
           </button>
           <button
             onClick={() => setActiveTab('calculator')}
-            className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
-              activeTab === 'calculator' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+            className={`flex-1 py-3 px-4  rounded-md font-medium transition ${
+              activeTab === 'calculator' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-blue-200'
             }`}
           >
             Check Eligibility
@@ -800,9 +806,9 @@ ACTION REQUIRED: Follow up with student for consultation.
         {/* Home Tab */}
         {activeTab === 'home' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to R-Pro ScholarTrack</h2>
-              <p className="text-gray-600 mb-6">
+           <div className="bg-slate-900/95 rounded-xl shadow-lg p-8">
+  <h2 className="text-3xl font-bold text-white mb-4">Welcome to R-Pro ScholarTrack</h2>
+  <p className="text-slate-200 mb-6">
                 Discover which international programs you qualify for based on your CGPA. Get instant, 
                 accurate eligibility results for study destinations worldwide.
               </p>
@@ -816,17 +822,17 @@ ACTION REQUIRED: Follow up with student for consultation.
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="bg-blue-200 rounded-xl shadow-lg p-6">
                 <Calculator className="w-12 h-12 text-red-600 mb-4" />
                 <h3 className="text-xl font-bold text-gray-800 mb-2">CGPA Calculator</h3>
                 <p className="text-gray-600">Convert your grades from any grading system to standardized CGPA</p>
               </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="bg-blue-200 rounded-xl shadow-lg p-6">
                 <Globe className="w-12 h-12 text-blue-600 mb-4" />
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Global Programs</h3>
                 <p className="text-gray-600">Explore eligibility for Canada, UK, USA, Australia, and Europe</p>
               </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="bg-blue-200 rounded-xl shadow-lg p-6">
                 <MessageCircle className="w-12 h-12 text-red-600 mb-4" />
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Expert Guidance</h3>
                 <p className="text-gray-600">Get personalized counseling from R-Pro's experienced team</p>
@@ -921,9 +927,11 @@ ACTION REQUIRED: Follow up with student for consultation.
               </div>
 
               {/* Academic Information Section */}
+              
               <div className="bg-red-50 rounded-lg p-6 border-2 border-red-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                  <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span>
+                  {/* <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span> */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ee4949" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-school-icon lucide-school"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 5v16"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 5v16"/><circle cx="12" cy="9" r="2"/></svg>
                   Academic Information
                 </h3>
 
@@ -963,7 +971,8 @@ ACTION REQUIRED: Follow up with student for consultation.
               {/* Study Destination Section */}
               <div className="bg-blue-50 rounded-lg p-6 border-2 border-blue-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span>
+                  {/* <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span> */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4c49ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-icon lucide-book"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
                   Study Destination
                 </h3>
 
