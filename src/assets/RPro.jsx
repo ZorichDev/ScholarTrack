@@ -1,575 +1,3 @@
-// import React, { useState } from 'react';
-// import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone } from 'lucide-react';
-
-// export default function ScholarTrack() {
-//   // ============================================
-//   // CONFIGURATION - SET YOUR EMAIL HERE
-//   // ============================================
-//   const RPRO_RECIPIENT_EMAIL = "francis1chinazor@gmail.com"; // 👈 CHANGE THIS TO YOUR EMAIL
-//   const RPRO_CC_EMAILS = ["it.solution@rprogroup.net", "francis.mgbadigha@rprogroup.net"]; // 👈 ADD ADDITIONAL EMAILS HERE
-//   // ============================================
-
-//   const [activeTab, setActiveTab] = useState('home');
-//   const [cgpa, setCgpa] = useState('');
-//   const [maxCgpa, setMaxCgpa] = useState('5.0');
-//   const [country, setCountry] = useState('');
-//   const [results, setResults] = useState(null);
-//   const [studentInfo, setStudentInfo] = useState({
-//     fullName: '',
-//     email: '',
-//     phone: '',
-//     currentLevel: '',
-//     fieldOfStudy: ''
-//   });
-//   const [showChat, setShowChat] = useState(false);
-//   const [chatMessages, setChatMessages] = useState([
-//     { type: 'bot', text: 'Hello! I\'m here to help you with any questions about your program eligibility. How can I assist you today?' }
-//   ]);
-//   const [chatInput, setChatInput] = useState('');
-
-//   const programEligibility = {
-//     'Canada': {
-//       'Masters': { min: 3.0, desc: 'Graduate degree programs (1-2 years)' },
-//       'Postgraduate Diploma': { min: 2.5, desc: 'Professional certification programs (1 year)' },
-//       'Graduate Certificate': { min: 2.3, desc: 'Specialized skill programs (8-12 months)' },
-//       'Pre-Masters': { min: 2.0, desc: 'Pathway programs to Masters' }
-//     },
-//     'UK': {
-//       'Masters': { min: 3.0, desc: 'Graduate degree programs (1 year)' },
-//       'Postgraduate Diploma': { min: 2.5, desc: 'Professional qualification (9-12 months)' },
-//       'Graduate Certificate': { min: 2.3, desc: 'Short professional courses (6-9 months)' },
-//       'Pre-Masters': { min: 2.0, desc: 'Foundation to Masters programs' }
-//     },
-//     'USA': {
-//       'Masters': { min: 3.0, desc: 'Graduate degree programs (2 years)' },
-//       'Graduate Certificate': { min: 2.5, desc: 'Professional development programs (1 year)' },
-//       'Pre-Masters': { min: 2.2, desc: 'Pathway programs to graduate study' }
-//     },
-//     'Australia': {
-//       'Masters': { min: 2.8, desc: 'Graduate degree programs (1.5-2 years)' },
-//       'Postgraduate Diploma': { min: 2.5, desc: 'Professional programs (1 year)' },
-//       'Graduate Certificate': { min: 2.3, desc: 'Specialized courses (6 months)' },
-//       'Pre-Masters': { min: 2.0, desc: 'Pathway to Masters programs' }
-//     },
-//     'Europe': {
-//       'Masters': { min: 2.8, desc: 'Graduate programs across European universities' },
-//       'Postgraduate Diploma': { min: 2.4, desc: 'Professional qualifications' },
-//       'Graduate Certificate': { min: 2.2, desc: 'Short-term specialized programs' }
-//     }
-//   };
-
-//   const calculateEligibility = () => {
-//     if (!cgpa || !country) {
-//       alert('Please enter your CGPA and select a country');
-//       return;
-//     }
-
-//     if (!studentInfo.fullName || !studentInfo.email || !studentInfo.phone) {
-//       alert('Please fill in all your personal information');
-//       return;
-//     }
-
-//     const normalizedCgpa = (parseFloat(cgpa) / parseFloat(maxCgpa)) * 5.0;
-//     const countryPrograms = programEligibility[country];
-//     const eligible = [];
-
-//     Object.entries(countryPrograms).forEach(([program, data]) => {
-//       if (normalizedCgpa >= data.min) {
-//         eligible.push({ program, ...data });
-//       }
-//     });
-
-//     const resultData = {
-//       cgpa: parseFloat(cgpa),
-//       normalizedCgpa: normalizedCgpa.toFixed(2),
-//       country,
-//       eligible: eligible.sort((a, b) => b.min - a.min),
-//       studentInfo,
-//       gradingScale: maxCgpa,
-//       timestamp: new Date().toLocaleString()
-//     };
-
-//     setResults(resultData);
-//     setActiveTab('results');
-    
-//     // Send email notification to R-Pro
-//     sendEmailNotification(resultData);
-//   };
-
-//   const sendEmailNotification = async (data) => {
-//     // Prepare email content
-//     const emailContent = `
-// NEW STUDENT ELIGIBILITY CHECK - R-Pro ScholarTrack
-// ================================================
-
-// STUDENT INFORMATION:
-// -------------------
-// Name: ${data.studentInfo.fullName}
-// Email: ${data.studentInfo.email}
-// Phone: ${data.studentInfo.phone}
-// Current Level: ${data.studentInfo.currentLevel}
-// Field of Study: ${data.studentInfo.fieldOfStudy}
-
-// ACADEMIC DETAILS:
-// ----------------
-// CGPA: ${data.cgpa} (on ${data.gradingScale} scale)
-// Normalized CGPA: ${data.normalizedCgpa}/5.0
-// Preferred Destination: ${data.country}
-
-// ELIGIBLE PROGRAMS:
-// -----------------
-// ${data.eligible.length > 0 
-//   ? data.eligible.map(p => `✓ ${p.program} - ${p.desc} (Min CGPA: ${p.min})`).join('\n')
-//   : 'No programs meet current eligibility criteria - counseling recommended'}
-
-// Date & Time: ${data.timestamp}
-// ================================================
-
-// This inquiry will be sent to: ${RPRO_RECIPIENT_EMAIL}
-// CC: ${RPRO_CC_EMAILS.join(', ')}
-
-// ACTION REQUIRED: Follow up with student for consultation.
-//     `;
-
-//     // Here you would integrate with your email service
-//     // For now, we'll show a console log and success message
-//     console.log('Email Configuration:', {
-//       to: RPRO_RECIPIENT_EMAIL,
-//       cc: RPRO_CC_EMAILS,
-//       subject: `New Student Inquiry - ${data.studentInfo.fullName}`,
-//       body: emailContent
-//     });
-    
-//     // INTEGRATION OPTIONS:
-//     // 
-//     // Option 1: EmailJS (Recommended - No Backend Required)
-//     // Uncomment and configure this section after setting up EmailJS account
-//     /*
-//     try {
-//       await emailjs.send(
-//         'YOUR_SERVICE_ID',
-//         'YOUR_TEMPLATE_ID',
-//         {
-//           to_email: RPRO_RECIPIENT_EMAIL,
-//           cc_emails: RPRO_CC_EMAILS.join(','),
-//           student_name: data.studentInfo.fullName,
-//           student_email: data.studentInfo.email,
-//           student_phone: data.studentInfo.phone,
-//           cgpa: data.cgpa,
-//           country: data.country,
-//           message: emailContent
-//         },
-//         'YOUR_PUBLIC_KEY'
-//       );
-//       alert('Your eligibility results have been sent to our counseling team. We will contact you shortly!');
-//     } catch (error) {
-//       console.error('Email send failed:', error);
-//       alert('Thank you! Your information has been recorded. Our team will contact you soon.');
-//     }
-//     */
-    
-//     // Option 2: Your Backend API
-//     /*
-//     try {
-//       await fetch('https://your-api.com/send-inquiry', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//           to: RPRO_RECIPIENT_EMAIL,
-//           cc: RPRO_CC_EMAILS,
-//           studentData: data,
-//           emailContent: emailContent
-//         })
-//       });
-//     } catch (error) {
-//       console.error('API call failed:', error);
-//     }
-//     */
-    
-//     // Show confirmation to user
-//     alert(`Your eligibility results have been sent to our counseling team at ${RPRO_RECIPIENT_EMAIL}. We will contact you shortly!`);
-//   };
-
-//   const sendMessage = () => {
-//     if (!chatInput.trim()) return;
-    
-//     setChatMessages([...chatMessages, 
-//       { type: 'user', text: chatInput },
-//       { type: 'bot', text: 'Thank you for your message. An R-Pro counselor will respond shortly. For immediate assistance, please book a consultation session.' }
-//     ]);
-//     setChatInput('');
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-//       {/* Header */}
-//       <header className="bg-white shadow-md">
-//         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-//           <div className="flex items-center space-x-3">
-//             <GraduationCap className="w-8 h-8 text-indigo-600" />
-//             <div>
-//               <h1 className="text-2xl font-bold text-gray-800">R-Pro ScholarTrack</h1>
-//               <p className="text-xs text-gray-600">Your Path to Global Education</p>
-//             </div>
-//           </div>
-//           <button
-//             onClick={() => setShowChat(!showChat)}
-//             className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-//           >
-//             <MessageCircle className="w-5 h-5" />
-//             <span>Chat Support</span>
-//           </button>
-//         </div>
-//       </header>
-
-//       <div className="max-w-7xl mx-auto px-4 py-8">
-//         {/* Navigation Tabs */}
-//         <div className="flex space-x-2 mb-6 bg-white rounded-lg p-2 shadow">
-//           <button
-//             onClick={() => setActiveTab('home')}
-//             className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
-//               activeTab === 'home' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-//             }`}
-//           >
-//             Home
-//           </button>
-//           <button
-//             onClick={() => setActiveTab('calculator')}
-//             className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
-//               activeTab === 'calculator' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-//             }`}
-//           >
-//             Check Eligibility
-//           </button>
-//           {results && (
-//             <button
-//               onClick={() => setActiveTab('results')}
-//               className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
-//                 activeTab === 'results' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-//               }`}
-//             >
-//               My Results
-//             </button>
-//           )}
-//         </div>
-
-//         {/* Home Tab */}
-//         {activeTab === 'home' && (
-//           <div className="space-y-6">
-//             <div className="bg-white rounded-xl shadow-lg p-8">
-//               <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to R-Pro ScholarTrack</h2>
-//               <p className="text-gray-600 mb-6">
-//                 Discover which international programs you qualify for based on your CGPA. Get instant, 
-//                 accurate eligibility results for study destinations worldwide.
-//               </p>
-//               <button
-//                 onClick={() => setActiveTab('calculator')}
-//                 className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition flex items-center space-x-2"
-//               >
-//                 <span>Get Started</span>
-//                 <ArrowRight className="w-5 h-5" />
-//               </button>
-//             </div>
-
-//             <div className="grid md:grid-cols-3 gap-6">
-//               <div className="bg-white rounded-xl shadow-lg p-6">
-//                 <Calculator className="w-12 h-12 text-indigo-600 mb-4" />
-//                 <h3 className="text-xl font-bold text-gray-800 mb-2">CGPA Calculator</h3>
-//                 <p className="text-gray-600">Convert your grades from any grading system to standardized CGPA</p>
-//               </div>
-//               <div className="bg-white rounded-xl shadow-lg p-6">
-//                 <Globe className="w-12 h-12 text-indigo-600 mb-4" />
-//                 <h3 className="text-xl font-bold text-gray-800 mb-2">Global Programs</h3>
-//                 <p className="text-gray-600">Explore eligibility for Canada, UK, USA, Australia, and Europe</p>
-//               </div>
-//               <div className="bg-white rounded-xl shadow-lg p-6">
-//                 <MessageCircle className="w-12 h-12 text-indigo-600 mb-4" />
-//                 <h3 className="text-xl font-bold text-gray-800 mb-2">Expert Guidance</h3>
-//                 <p className="text-gray-600">Get personalized counseling from R-Pro's experienced team</p>
-//               </div>
-//             </div>
-//           </div>
-//         )}
-
-//         {/* Calculator Tab */}
-//         {activeTab === 'calculator' && (
-//           <div className="bg-white rounded-xl shadow-lg p-8">
-//             <h2 className="text-2xl font-bold text-gray-800 mb-6">Check Your Program Eligibility</h2>
-            
-//             <div className="space-y-6">
-//               {/* Personal Information Section */}
-//               <div className="bg-indigo-50 rounded-lg p-6 border-2 border-indigo-200">
-//                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-//                   <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">1</span>
-//                   Personal Information
-//                 </h3>
-                
-//                 <div className="grid md:grid-cols-2 gap-4">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Full Name *
-//                     </label>
-//                     <input
-//                       type="text"
-//                       value={studentInfo.fullName}
-//                       onChange={(e) => setStudentInfo({...studentInfo, fullName: e.target.value})}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                       placeholder="John Doe"
-//                     />
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Email Address *
-//                     </label>
-//                     <input
-//                       type="email"
-//                       value={studentInfo.email}
-//                       onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                       placeholder="john@example.com"
-//                     />
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Phone Number *
-//                     </label>
-//                     <input
-//                       type="tel"
-//                       value={studentInfo.phone}
-//                       onChange={(e) => setStudentInfo({...studentInfo, phone: e.target.value})}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                       placeholder="+234 800 000 0000"
-//                     />
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Current Education Level
-//                     </label>
-//                     <select
-//                       value={studentInfo.currentLevel}
-//                       onChange={(e) => setStudentInfo({...studentInfo, currentLevel: e.target.value})}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                     >
-//                       <option value="">Select level</option>
-//                       <option value="Bachelor's Degree">Bachelor's Degree</option>
-//                       <option value="HND">HND</option>
-//                       <option value="Master's Degree">Master's Degree</option>
-//                       <option value="Other">Other</option>
-//                     </select>
-//                   </div>
-
-//                   <div className="md:col-span-2">
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Field of Study
-//                     </label>
-//                     <input
-//                       type="text"
-//                       value={studentInfo.fieldOfStudy}
-//                       onChange={(e) => setStudentInfo({...studentInfo, fieldOfStudy: e.target.value})}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                       placeholder="e.g., Computer Science, Business Administration"
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {/* Academic Information Section */}
-//               <div className="bg-purple-50 rounded-lg p-6 border-2 border-purple-200">
-//                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-//                   <span className="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span>
-//                   Academic Information
-//                 </h3>
-
-//                 <div className="grid md:grid-cols-2 gap-4">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Your CGPA *
-//                     </label>
-//                     <input
-//                       type="number"
-//                       step="0.01"
-//                       value={cgpa}
-//                       onChange={(e) => setCgpa(e.target.value)}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                       placeholder="e.g., 3.5"
-//                     />
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                       Grading Scale *
-//                     </label>
-//                     <select
-//                       value={maxCgpa}
-//                       onChange={(e) => setMaxCgpa(e.target.value)}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                     >
-//                       <option value="4.0">4.0 Scale (US Standard)</option>
-//                       <option value="5.0">5.0 Scale (Nigerian Standard)</option>
-//                       <option value="7.0">7.0 Scale</option>
-//                       <option value="10.0">10.0 Scale</option>
-//                     </select>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {/* Study Destination Section */}
-//               <div className="bg-green-50 rounded-lg p-6 border-2 border-green-200">
-//                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-//                   <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span>
-//                   Study Destination
-//                 </h3>
-
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-2">
-//                     Preferred Study Destination *
-//                   </label>
-//                   <select
-//                     value={country}
-//                     onChange={(e) => setCountry(e.target.value)}
-//                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//                   >
-//                     <option value="">Select a country</option>
-//                     <option value="Canada">Canada</option>
-//                     <option value="UK">United Kingdom</option>
-//                     <option value="USA">United States</option>
-//                     <option value="Australia">Australia</option>
-//                     <option value="Europe">Europe</option>
-//                   </select>
-//                 </div>
-//               </div>
-
-//               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-//                 <p className="text-sm text-gray-700">
-//                   <strong>Note:</strong> Your information will be sent to our counseling team for follow-up consultation.
-//                 </p>
-//               </div>
-
-//               <button
-//                 onClick={calculateEligibility}
-//                 className="w-full bg-indigo-600 text-white py-4 rounded-lg hover:bg-indigo-700 transition font-medium flex items-center justify-center space-x-2 text-lg"
-//               >
-//                 <Calculator className="w-6 h-6" />
-//                 <span>Calculate My Eligibility</span>
-//               </button>
-//             </div>
-//           </div>
-//         )}
-
-//         {/* Results Tab */}
-//         {activeTab === 'results' && results && (
-//           <div className="space-y-6">
-//             <div className="bg-white rounded-xl shadow-lg p-8">
-//               <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Eligibility Results</h2>
-//               <div className="bg-indigo-50 rounded-lg p-4 mb-6">
-//                 <p className="text-sm text-gray-600">Student: <span className="font-bold text-indigo-600">{results.studentInfo.fullName}</span></p>
-//                 <p className="text-sm text-gray-600">Email: <span className="font-bold text-indigo-600">{results.studentInfo.email}</span></p>
-//                 <p className="text-sm text-gray-600">Your CGPA: <span className="font-bold text-indigo-600">{results.cgpa}</span> (on {results.gradingScale} scale)</p>
-//                 <p className="text-sm text-gray-600">Normalized CGPA: <span className="font-bold text-indigo-600">{results.normalizedCgpa}/5.0</span></p>
-//                 <p className="text-sm text-gray-600">Destination: <span className="font-bold text-indigo-600">{results.country}</span></p>
-//                 <div className="mt-3 pt-3 border-t border-indigo-200">
-//                   <p className="text-xs text-green-600 font-medium">✓ Your details have been sent to our counseling team</p>
-//                 </div>
-//               </div>
-
-//               {results.eligible.length > 0 ? (
-//                 <div className="space-y-4">
-//                   <h3 className="text-xl font-bold text-gray-800">You're Eligible For:</h3>
-//                   {results.eligible.map((prog, idx) => (
-//                     <div key={idx} className="border-l-4 border-indigo-600 bg-gray-50 p-4 rounded-r-lg">
-//                       <div className="flex items-start space-x-3">
-//                         <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-//                         <div>
-//                           <h4 className="font-bold text-gray-800">{prog.program}</h4>
-//                           <p className="text-sm text-gray-600">{prog.desc}</p>
-//                           <p className="text-xs text-gray-500 mt-1">Minimum CGPA: {prog.min}/5.0</p>
-//                         </div>
-//                       </div>
-//                     </div>
-//                   ))}
-//                 </div>
-//               ) : (
-//                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-//                   <p className="text-gray-700">Based on your current CGPA, you may not meet the minimum requirements for programs in {results.country}. However, R-Pro can help you explore alternative pathways!</p>
-//                 </div>
-//               )}
-
-//               <div className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-6 text-white">
-//                 <h3 className="text-xl font-bold mb-3">Ready to Take the Next Step?</h3>
-//                 <p className="mb-4">Book a free consultation with our expert counselors to discuss your options and application strategy.</p>
-//                 <div className="flex flex-wrap gap-3">
-//                   <button className="bg-white text-indigo-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-medium flex items-center space-x-2">
-//                     <Phone className="w-4 h-4" />
-//                     <span>Call Us</span>
-//                   </button>
-//                   <button className="bg-white text-indigo-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-medium flex items-center space-x-2">
-//                     <Mail className="w-4 h-4" />
-//                     <span>Email Us</span>
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Chat Widget */}
-//       {showChat && (
-//         <div className="fixed bottom-4 right-4 w-96 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-//           <div className="bg-indigo-600 text-white p-4 flex items-center justify-between">
-//             <div className="flex items-center space-x-2">
-//               <MessageCircle className="w-5 h-5" />
-//               <span className="font-medium">Chat with R-Pro</span>
-//             </div>
-//             <button onClick={() => setShowChat(false)} className="text-white hover:text-gray-200">✕</button>
-//           </div>
-//           <div className="h-80 overflow-y-auto p-4 bg-gray-50 space-y-3">
-//             {chatMessages.map((msg, idx) => (
-//               <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-//                 <div className={`max-w-xs px-4 py-2 rounded-lg ${
-//                   msg.type === 'user' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 shadow'
-//                 }`}>
-//                   {msg.text}
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//           <div className="p-4 border-t">
-//             <div className="flex space-x-2">
-//               <input
-//                 type="text"
-//                 value={chatInput}
-//                 onChange={(e) => setChatInput(e.target.value)}
-//                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-//                 placeholder="Type your message..."
-//                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//               />
-//               <button
-//                 onClick={sendMessage}
-//                 className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-//               >
-//                 Send
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Footer */}
-//       <footer className="bg-gray-800 text-white mt-12 py-8">
-//         <div className="max-w-7xl mx-auto px-4 text-center">
-//           <p className="text-sm">© 2025 R-Pro Group. All rights reserved.</p>
-//           <p className="text-xs text-gray-400 mt-2">Empowering students to achieve their global education dreams</p>
-//         </div>
-//       </footer>
-//     </div>
-//   );
-// }
-
-
 import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone } from 'lucide-react';
@@ -578,29 +6,44 @@ export default function ScholarTrack() {
   // ============================================
   // CONFIGURATION - SET YOUR EMAIL HERE
   // ============================================
-  const RPRO_RECIPIENT_EMAIL = "counseling@rprogroup.com"; // 👈 CHANGE THIS TO YOUR EMAIL
+  const RPRO_RECIPIENT_EMAIL = "francis1chinazor@gmail.com"; // 👈 CHANGE THIS TO YOUR EMAIL
   const RPRO_CC_EMAILS = ["hilda.chijioke@rprogroup.com", "admin@rprogroup.com"]; // 👈 ADD ADDITIONAL EMAILS HERE
   
   // EmailJS Configuration (Get these from emailjs.com dashboard)
-  const EMAILJS_SERVICE_ID = "service_xxxxxxx"; // 👈 ADD YOUR SERVICE ID
-  const EMAILJS_TEMPLATE_ID = "template_xxxxxxx"; // 👈 ADD YOUR TEMPLATE ID
-  const EMAILJS_PUBLIC_KEY = "your_public_key_here"; // 👈 ADD YOUR PUBLIC KEY
+  const EMAILJS_SERVICE_ID = "service_ptzp7rd"; // 👈 ADD YOUR SERVICE ID
+  const EMAILJS_TEMPLATE_ID = "template_uvkbxrd"; // 👈 ADD YOUR TEMPLATE ID
+  const EMAILJS_PUBLIC_KEY = ""; // 👈 ADD YOUR PUBLIC KEY
+  
+  // Tawk.to Configuration (Get this from your Tawk.to dashboard)
+  const TAWK_PROPERTY_ID = "68e39551914f071953b2ca10"; // 👈 ADD YOUR TAWK PROPERTY ID (e.g., "507f1f77bcf86cd799439011")
+  const TAWK_WIDGET_ID = "1j6sfuhnq"; // 👈 ADD YOUR TAWK WIDGET ID (e.g., "default")
   // ============================================
 
   useEffect(() => {
     // Load EmailJS script
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.async = true;
-    script.onload = () => {
+    const emailScript = document.createElement('script');
+    emailScript.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    emailScript.async = true;
+    emailScript.onload = () => {
       if (window.emailjs) {
         window.emailjs.init(EMAILJS_PUBLIC_KEY);
       }
     };
-    document.body.appendChild(script);
+    document.body.appendChild(emailScript);
+
+    // Load Tawk.to script
+    const tawkScript = document.createElement('script');
+    tawkScript.async = true;
+    tawkScript.src = `https://embed.tawk.to/${TAWK_PROPERTY_ID}/${TAWK_WIDGET_ID}`;
+    tawkScript.charset = 'UTF-8';
+    tawkScript.setAttribute('crossorigin', '*');
+    document.body.appendChild(tawkScript);
 
     return () => {
-      document.body.removeChild(script);
+      document.body.removeChild(emailScript);
+      if (document.body.contains(tawkScript)) {
+        document.body.removeChild(tawkScript);
+      }
     };
   }, []);
 
@@ -616,11 +59,6 @@ export default function ScholarTrack() {
     currentLevel: '',
     fieldOfStudy: ''
   });
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-    { type: 'bot', text: 'Hello! I\'m here to help you with any questions about your program eligibility. How can I assist you today?' }
-  ]);
-  const [chatInput, setChatInput] = useState('');
 
   const programEligibility = {
     'Canada': {
@@ -735,14 +173,13 @@ ACTION REQUIRED: Follow up with student for consultation.
     alert(`Your eligibility results have been sent to our counseling team at ${RPRO_RECIPIENT_EMAIL}. We will contact you shortly!`);
   };
 
-  const sendMessage = () => {
-    if (!chatInput.trim()) return;
-    
-    setChatMessages([...chatMessages, 
-      { type: 'user', text: chatInput },
-      { type: 'bot', text: 'Thank you for your message. An R-Pro counselor will respond shortly. For immediate assistance you can chat us on 09069246577, please book a consultation session.' }
-    ]);
-    setChatInput('');
+  const openTawkChat = () => {
+    // Open Tawk.to chat widget
+    if (window.Tawk_API) {
+      window.Tawk_API.maximize();
+    } else {
+      alert('Chat is loading, please try again in a moment.');
+    }
   };
 
   return (
@@ -751,19 +188,18 @@ ACTION REQUIRED: Follow up with student for consultation.
       <header className="bg-black shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            
-                  <img 
-                   src={logo}
-                  alt="Logo" 
-                  className="w-8 h-8 object-contain"
-                />
+            <img 
+              src={logo}
+              alt="Logo" 
+              className="w-8 h-8 object-contain"
+            />
             <div>
-              <h1 className="text-2xl font-bold text-white -800" >R-Pro ScholarTrack</h1>
+              <h1 className="text-2xl font-bold text-white">R-Pro ScholarTrack</h1>
               <p className="text-xs text-red-600">Your Path to Global Education</p>
             </div>
           </div>
           <button
-            onClick={() => setShowChat(!showChat)}
+            onClick={openTawkChat}
             className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             <MessageCircle className="w-5 h-5" />
@@ -785,7 +221,7 @@ ACTION REQUIRED: Follow up with student for consultation.
           </button>
           <button
             onClick={() => setActiveTab('calculator')}
-            className={`flex-1 py-3 px-4  rounded-md font-medium transition ${
+            className={`flex-1 py-3 px-4 rounded-md font-medium transition ${
               activeTab === 'calculator' ? 'bg-red-600 text-white' : 'text-gray-600 hover:bg-blue-200'
             }`}
           >
@@ -806,9 +242,9 @@ ACTION REQUIRED: Follow up with student for consultation.
         {/* Home Tab */}
         {activeTab === 'home' && (
           <div className="space-y-6">
-           <div className="bg-slate-900/95 rounded-xl shadow-lg p-8">
-  <h2 className="text-3xl font-bold text-white mb-4">Welcome to R-Pro ScholarTrack</h2>
-  <p className="text-slate-200 mb-6">
+            <div className="bg-slate-900/95 rounded-xl shadow-lg p-8">
+              <h2 className="text-3xl font-bold text-white mb-4">Welcome to R-Pro ScholarTrack</h2>
+              <p className="text-slate-200 mb-6">
                 Discover which international programs you qualify for based on your CGPA. Get instant, 
                 accurate eligibility results for study destinations worldwide.
               </p>
@@ -850,8 +286,9 @@ ACTION REQUIRED: Follow up with student for consultation.
               {/* Personal Information Section */}
               <div className="bg-blue-50 rounded-lg p-6 border-2 border-blue-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                  {/* <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">1</span> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4c49ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-signature-icon lucide-signature"><path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4c49ee" strokeWidth="2" strokeLinecap="round" 
+                  strokeLinejoin="round" className="lucide lucide-signature-icon lucide-signature mr-2"><path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0
+                   1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/></svg>
                   Personal Information
                 </h3>
                 
@@ -928,11 +365,11 @@ ACTION REQUIRED: Follow up with student for consultation.
               </div>
 
               {/* Academic Information Section */}
-              
               <div className="bg-red-50 rounded-lg p-6 border-2 border-red-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                  {/* <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ee4949" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-school-icon lucide-school"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 5v16"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 5v16"/><circle cx="12" cy="9" r="2"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ee4949" strokeWidth="2" strokeLinecap="round" 
+                  strokeLinejoin="round" className="lucide lucide-school-icon lucide-school mr-2"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 5v16"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.
+                  788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 5v16"/><circle cx="12" cy="9" r="2"/></svg>
                   Academic Information
                 </h3>
 
@@ -972,8 +409,9 @@ ACTION REQUIRED: Follow up with student for consultation.
               {/* Study Destination Section */}
               <div className="bg-blue-50 rounded-lg p-6 border-2 border-blue-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                  {/* <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4c49ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-icon lucide-book"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4c49ee" strokeWidth="2" strokeLinecap="round" 
+                  strokeLinejoin="round" className="lucide lucide-book-icon lucide-book mr-2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0
+                   1 0-5H20"/></svg>
                   Study Destination
                 </h3>
 
@@ -1055,7 +493,14 @@ ACTION REQUIRED: Follow up with student for consultation.
                 <h3 className="text-xl font-bold mb-3">Ready to Take the Next Step?</h3>
                 <p className="mb-4">Book a free consultation with our expert counselors to discuss your options and application strategy.</p>
                 <div className="flex flex-wrap gap-3">
-                  <button className="bg-white text-red-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-medium flex items-center space-x-2">
+                  <button 
+                    onClick={openTawkChat}
+                    className="bg-white text-red-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-medium flex items-center space-x-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat with Us</span>
+                  </button>
+                  <button className="bg-white text-blue-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-medium flex items-center space-x-2">
                     <Phone className="w-4 h-4" />
                     <span>Call Us</span>
                   </button>
@@ -1069,48 +514,6 @@ ACTION REQUIRED: Follow up with student for consultation.
           </div>
         )}
       </div>
-
-      {/* Chat Widget */}
-      {showChat && (
-        <div className="fixed bottom-4 right-4 w-96 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-          <div className="bg-red-600 text-white p-4 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <MessageCircle className="w-5 h-5" />
-              <span className="font-medium">Chat with R-Pro</span>
-            </div>
-            <button onClick={() => setShowChat(false)} className="text-white hover:text-gray-200">✕</button>
-          </div>
-          <div className="h-80 overflow-y-auto p-4 bg-gray-50 space-y-3">
-            {chatMessages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-xs px-4 py-2 rounded-lg ${
-                  msg.type === 'user' ? 'bg-red-600 text-white' : 'bg-white text-gray-800 shadow'
-                }`}>
-                  {msg.text}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="p-4 border-t">
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Type your message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              />
-              <button
-                onClick={sendMessage}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Footer */}
       <footer className="bg-gray-800 text-white mt-12 py-8">
