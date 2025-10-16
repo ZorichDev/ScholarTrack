@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone, User, BookOpen, MapPin, Award, TrendingUp, Users, Clock, Star, Shield, Zap, Target } from 'lucide-react';
 
-// ============================================
 // CONFIGURATION CONSTANTS
 // ============================================
 const CONFIG = {
