@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone, User, BookOpen, MapPin, Award, TrendingUp, Users, Clock, Star, Shield, Zap, Target } from 'lucide-react';
@@ -10,10 +8,10 @@ import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRigh
 const CONFIG = {
   email: {
     recipient: "francis1chinazor@gmail.com",
-    cc: ["hilda.chijioke@rprogroup.com", "admin@rprogroup.com"],
+    cc: "hilda.chijioke@rprogroup.com,admin@rprogroup.com",
     serviceId: "service_ptzp7rd",
-    templateId: "template_uvkbxrd",
-    publicKey: ""
+    templateId: "template_rjb0396",
+    publicKey: "3PD5AyCly9DCyS4u1" // Make sure this is your actual public key
   },
   tawk: {
     propertyId: "68e39551914f071953b2ca10",
@@ -148,6 +146,67 @@ const getEligiblePrograms = (normalizedCgpa, country) => {
 };
 
 // ============================================
+// EMAILJS SERVICE FUNCTION
+// ============================================
+const sendEmailNotification = async (data) => {
+  try {
+    // Check if emailjs is available
+    if (!window.emailjs) {
+      console.error('EmailJS not loaded yet');
+      return false;
+    }
+
+    // Prepare the email content
+    const eligibleProgramsText = data.eligible.length > 0 
+      ? data.eligible.map((p, index) => 
+          `${index + 1}. ${p.program} - ${p.desc} (Min CGPA: ${p.min}/5.0)`
+        ).join('\n')
+      : 'No eligible programs found. Student needs counseling for alternative pathways.';
+
+    const templateParams = {
+      to_email: CONFIG.email.recipient,
+      cc_email: CONFIG.email.cc,
+      student_name: data.studentInfo.fullName,
+      student_email: data.studentInfo.email,
+      student_phone: data.studentInfo.phone || 'Not provided',
+      current_level: data.studentInfo.currentLevel || 'Not provided',
+      field_of_study: data.studentInfo.fieldOfStudy || 'Not provided',
+      original_cgpa: data.cgpa,
+      grading_scale: data.gradingScale,
+      normalized_cgpa: data.normalizedCgpa,
+      destination: data.country,
+      eligible_programs: eligibleProgramsText,
+      total_eligible: data.eligible.length,
+      timestamp: data.timestamp,
+      message: `New student eligibility check completed for ${data.studentInfo.fullName}.`,
+      subject: `R-Pro ScholarTrack - Eligibility Results for ${data.studentInfo.fullName}`
+    };
+
+    console.log('Sending email with params:', templateParams);
+
+    // Send email using EmailJS
+    const response = await window.emailjs.send(
+      CONFIG.email.serviceId,
+      CONFIG.email.templateId,
+      templateParams
+    );
+    
+    console.log('Email sent successfully:', response);
+    return true;
+    
+  } catch (error) {
+    console.error('EmailJS failed to send:', error);
+    
+    // Log detailed error information
+    if (error.text) {
+      console.error('EmailJS error details:', error.text);
+    }
+    
+    return false;
+  }
+};
+
+// ============================================
 // COMPONENT: Input Field
 // ============================================
 const InputField = ({ label, type = "text", value, onChange, placeholder, required = false, icon: Icon }) => (
@@ -250,6 +309,7 @@ export default function ScholarTrack() {
   const [maxCgpa, setMaxCgpa] = useState('5.0');
   const [country, setCountry] = useState('');
   const [results, setResults] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [studentInfo, setStudentInfo] = useState({
     fullName: '',
     email: '',
@@ -259,32 +319,45 @@ export default function ScholarTrack() {
   });
 
   useEffect(() => {
-    const emailScript = document.createElement('script');
-    emailScript.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    emailScript.async = true;
-    emailScript.onload = () => {
-      if (window.emailjs && CONFIG.email.publicKey) {
-        window.emailjs.init(CONFIG.email.publicKey);
+    // Load EmailJS script
+    const loadEmailJS = async () => {
+      if (!window.emailjs) {
+        try {
+          // Import EmailJS directly as a module
+          const emailJSModule = await import('@emailjs/browser');
+          window.emailjs = emailJSModule;
+          
+          if (CONFIG.email.publicKey && CONFIG.email.publicKey !== 'YOUR_PUBLIC_KEY') {
+            window.emailjs.init(CONFIG.email.publicKey);
+            console.log('EmailJS initialized successfully');
+          }
+        } catch (error) {
+          console.error('Failed to load EmailJS:', error);
+        }
       }
     };
-    document.body.appendChild(emailScript);
 
-    const tawkScript = document.createElement('script');
-    tawkScript.async = true;
-    tawkScript.src = `https://embed.tawk.to/${CONFIG.tawk.propertyId}/${CONFIG.tawk.widgetId}`;
-    tawkScript.charset = 'UTF-8';
-    tawkScript.setAttribute('crossorigin', '*');
-    document.body.appendChild(tawkScript);
+    // Load Tawk.to script
+    const loadTawkTo = () => {
+      if (!window.Tawk_API) {
+        const tawkScript = document.createElement('script');
+        tawkScript.async = true;
+        tawkScript.src = `https://embed.tawk.to/${CONFIG.tawk.propertyId}/${CONFIG.tawk.widgetId}`;
+        tawkScript.charset = 'UTF-8';
+        tawkScript.setAttribute('crossorigin', '*');
+        document.body.appendChild(tawkScript);
+      }
+    };
+
+    loadEmailJS();
+    loadTawkTo();
 
     return () => {
-      document.body.removeChild(emailScript);
-      if (document.body.contains(tawkScript)) {
-        document.body.removeChild(tawkScript);
-      }
+      // Cleanup if needed
     };
   }, []);
 
-  const handleCalculate = () => {
+  const handleCalculate = async () => {
     if (!cgpa || !country) {
       alert('Please enter your CGPA and select a country');
       return;
@@ -295,52 +368,48 @@ export default function ScholarTrack() {
       return;
     }
 
-    const normalizedCgpa = normalizeGPA(cgpa, maxCgpa);
-    const eligible = getEligiblePrograms(normalizedCgpa, country);
+    setIsLoading(true);
 
-    const resultData = {
-      cgpa: parseFloat(cgpa),
-      normalizedCgpa: normalizedCgpa.toFixed(2),
-      country,
-      eligible,
-      studentInfo,
-      gradingScale: maxCgpa,
-      timestamp: new Date().toLocaleString()
-    };
+    try {
+      const normalizedCgpa = normalizeGPA(cgpa, maxCgpa);
+      const eligible = getEligiblePrograms(normalizedCgpa, country);
 
-    setResults(resultData);
-    setActiveTab('results');
-    sendNotification(resultData);
+      const resultData = {
+        cgpa: parseFloat(cgpa),
+        normalizedCgpa: normalizedCgpa.toFixed(2),
+        country,
+        eligible,
+        studentInfo,
+        gradingScale: maxCgpa,
+        timestamp: new Date().toLocaleString()
+      };
+
+      setResults(resultData);
+      setActiveTab('results');
+      
+      // Send email notification
+      await sendNotification(resultData);
+    } catch (error) {
+      console.error('Error calculating eligibility:', error);
+      alert('An error occurred while calculating your eligibility. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const sendNotification = (data) => {
-    const emailContent = `
-NEW STUDENT ELIGIBILITY CHECK - R-Pro ScholarTrack
-================================================
-
-STUDENT INFORMATION:
-Name: ${data.studentInfo.fullName}
-Email: ${data.studentInfo.email}
-Phone: ${data.studentInfo.phone}
-Current Level: ${data.studentInfo.currentLevel}
-Field of Study: ${data.studentInfo.fieldOfStudy}
-
-ACADEMIC DETAILS:
-CGPA: ${data.cgpa} (on ${data.gradingScale} scale)
-Normalized CGPA: ${data.normalizedCgpa}/5.0
-Destination: ${data.country}
-
-ELIGIBLE PROGRAMS:
-${data.eligible.length > 0 
-  ? data.eligible.map(p => `✓ ${p.program} - ${p.desc}`).join('\n')
-  : 'Counseling recommended'}
-
-Date: ${data.timestamp}
-================================================
-    `;
-
-    console.log('Email sent to:', CONFIG.email.recipient);
-    alert(`Your results have been sent to our team. We'll contact you shortly!`);
+  const sendNotification = async (data) => {
+    try {
+      const emailSent = await sendEmailNotification(data);
+      
+      if (emailSent) {
+        alert('🎉 Your results have been sent to our team! We will contact you within 24 hours.');
+      } else {
+        alert('✅ Results calculated! If you don\'t hear from us within 24 hours, please contact us directly.');
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+      alert('✅ Results calculated! Our team will review your information shortly.');
+    }
   };
 
   const openChat = () => {
@@ -437,7 +506,7 @@ Date: ${data.timestamp}
             {/* Features Section */}
             <div>
               <div className="text-center mb-6 md:mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-1000 mb-2">Why Choose R-Pro ScholarTrack?</h3>
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Why Choose R-Pro ScholarTrack?</h3>
                 <p className="text-sm md:text-base text-slate-600">Everything you need to start your study abroad journey</p>
               </div>
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
@@ -658,10 +727,24 @@ Date: ${data.timestamp}
 
               <button
                 onClick={handleCalculate}
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-4 md:py-5 rounded-xl hover:from-indigo-600 hover:to-purple-600 transition-all font-bold flex items-center justify-center space-x-2 md:space-x-3 text-base md:text-lg shadow-lg hover:shadow-xl"
+                disabled={isLoading}
+                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-4 md:py-5 rounded-xl transition-all font-bold flex items-center justify-center space-x-2 md:space-x-3 text-base md:text-lg shadow-lg hover:shadow-xl ${
+                  isLoading 
+                    ? 'opacity-50 cursor-not-allowed' 
+                    : 'hover:from-indigo-600 hover:to-purple-600'
+                }`}
               >
-                <Calculator className="w-5 h-5 md:w-6 md:h-6" />
-                <span>Calculate My Eligibility</span>
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Calculator className="w-5 h-5 md:w-6 md:h-6" />
+                    <span>Calculate My Eligibility</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -832,7 +915,7 @@ Date: ${data.timestamp}
                   </button>
 
                 <button
-                  onClick={() => window.location.href = "ffranzor@yahoo.com"}
+                  onClick={() => window.location.href = "mailto:franzor@yahoo.com"}
                   className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base sm:col-span-2 md:col-span-1">
                   <Mail className="w-4 h-4 md:w-5 md:h-5" />
                   <span>Email Us</span>
@@ -892,11 +975,11 @@ Date: ${data.timestamp}
               <ul className="space-y-1 md:space-y-2 text-xs md:text-sm text-slate-300">
                 <li className="flex items-center">
                   <Mail className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                  <a href="mailto:info@rprogroup.com" className="hover:text-white transition break-all"> @Rprogroup.com</a>
+                  <a href="mailto:info@rprogroup.com" className="hover:text-white transition break-all">info@rprogroup.com</a>
                 </li>
                 <li className="flex items-center">
                   <Phone className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                  <a href="tel:+2348000000000" className="hover:text-white transition">+234 832 248 454</a>
+                  <a href="tel:+234832248454" className="hover:text-white transition">+234 832 248 454</a>
                 </li>
                 <li className="flex items-center">
                   <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
