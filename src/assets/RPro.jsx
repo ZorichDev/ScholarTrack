@@ -10,7 +10,7 @@ const CONFIG = {
     cc: "hilda.chijioke@rprogroup.com,admin@rprogroup.com",
     serviceId: "service_ptzp7rd",
     templateId: "template_rjb0396",
-    publicKey: "3PD5AyCly9DCyS4u1" // Make sure this is your actual public key
+    publicKey: "3PD5AyCly9DCyS4u1"
   },
   tawk: {
     propertyId: "68e39551914f071953b2ca10",
@@ -18,34 +18,102 @@ const CONFIG = {
   }
 };
 
+const DEGREE_CLASSIFICATION = {
+  'First Class': { 
+    min: 4.50, 
+    max: 5.00, 
+    equivalent: '3.60 - 4.00',
+    description: 'First Class Honors'
+  },
+  'Second Class Upper': { 
+    min: 3.50, 
+    max: 4.49, 
+    equivalent: '2.80 - 3.59',
+    description: 'Second Class Upper (2:1)'
+  },
+  'Second Class Lower': { 
+    min: 2.40, 
+    max: 3.49, 
+    equivalent: '1.90 - 2.79',
+    description: 'Second Class Lower (2:2)'
+  },
+  'Third Class': { 
+    min: 1.50, 
+    max: 2.39, 
+    equivalent: '1.20 - 1.89',
+    description: 'Third Class'
+  },
+  'Pass': { 
+    min: 1.00, 
+    max: 1.49, 
+    equivalent: '1.00 - 1.19',
+    description: 'Pass'
+  },
+  'Fail': { 
+    min: 0.00, 
+    max: 0.99, 
+    equivalent: '0.00 - 0.99',
+    description: 'Fail'
+  }
+};
+
 const PROGRAM_ELIGIBILITY = {
   'Canada': {
-    'Masters': { min: 3.0, desc: 'Graduate degree programs (1-2 years)' },
-    'Postgraduate Diploma': { min: 2.5, desc: 'Professional certification programs (1 year)' },
-    'Graduate Certificate': { min: 2.3, desc: 'Specialized skill programs (8-12 months)' },
-    'Pre-Masters': { min: 2.0, desc: 'Pathway programs to Masters' }
+    // First Class & Second Class Upper (2:1)
+    'Direct Master\'s Degrees': { min: 3.5, desc: 'Full graduate degree programs at top universities (1-2 years)' },
+    'Direct PhD Pathways': { min: 4.5, desc: 'Research-focused doctoral programs with funding opportunities (4-6 years)' },
+    
+    // Second Class Lower (2:2)
+    'Graduate Certificates/Diplomas': { min: 2.4, desc: 'Professional development programs (8-12 months)' },
+    
+    // Third Class & Pass
+    'Postgraduate Diplomas': { min: 1.5, desc: 'Advanced diploma programs for career advancement (1 year)' },
+    'Pathway Programs': { min: 1.0, desc: 'Preparation for further graduate studies (1 year)' }
   },
   'UK': {
-    'Masters': { min: 3.0, desc: 'Graduate degree programs (1 year)' },
-    'Postgraduate Diploma': { min: 2.5, desc: 'Professional qualification (9-12 months)' },
-    'Graduate Certificate': { min: 2.3, desc: 'Short professional courses (6-9 months)' },
-    'Pre-Masters': { min: 2.0, desc: 'Foundation to Masters programs' }
+    // First Class & Second Class Upper (2:1)
+    'Direct Master\'s Degrees': { min: 3.5, desc: 'Taught and research programs at top universities (1 year)' },
+    
+    // Second Class Lower (2:2)
+    'Pre-Master\'s Pathway': { min: 2.4, desc: 'Preparation programs for Master\'s entry (6-9 months)' },
+    
+    // Third Class & Pass
+    'Pathway Programs': { min: 1.5, desc: 'Pre-Master\'s and foundation programs (9-12 months)' },
+    'Graduate Entry Foundation': { min: 1.0, desc: 'One-year foundational studies program (1 year)' }
   },
   'USA': {
-    'Masters': { min: 3.0, desc: 'Graduate degree programs (2 years)' },
-    'Graduate Certificate': { min: 2.5, desc: 'Professional development programs (1 year)' },
-    'Pre-Masters': { min: 2.2, desc: 'Pathway programs to graduate study' }
+    // First Class & Second Class Upper (2:1)
+    'Direct Master\'s Degrees': { min: 3.5, desc: 'Graduate programs at top-ranked universities (2 years)' },
+    'Direct PhD Pathways': { min: 4.5, desc: 'Fully-funded doctoral programs with stipends (5-6 years)' },
+    
+    // Second Class Lower (2:2)
+    'Master\'s Programs': { min: 2.4, desc: 'Graduate degrees with pathway options (2 years)' },
+    
+    // Third Class & Pass
+    'Bridge/Pathway Programs': { min: 1.5, desc: 'Academic preparation for graduate studies (1-2 years)' }
   },
   'Australia': {
-    'Masters': { min: 2.8, desc: 'Graduate degree programs (1.5-2 years)' },
-    'Postgraduate Diploma': { min: 2.5, desc: 'Professional programs (1 year)' },
-    'Graduate Certificate': { min: 2.3, desc: 'Specialized courses (6 months)' },
-    'Pre-Masters': { min: 2.0, desc: 'Pathway to Masters programs' }
+    // First Class & Second Class Upper (2:1)
+    'Direct Master\'s Degrees': { min: 3.5, desc: 'Coursework and research programs at top universities (1.5-2 years)' },
+    
+    // Second Class Lower (2:2)
+    'Direct Master\'s': { min: 2.4, desc: 'Graduate programs with work experience consideration (1.5-2 years)' },
+    
+    // Third Class & Pass
+    'Postgraduate Diplomas': { min: 1.5, desc: 'Career-focused qualification programs (1 year)' },
+    'Graduate Certificates': { min: 1.0, desc: 'Short-term specialized programs (6 months)' }
   },
   'Europe': {
-    'Masters': { min: 2.8, desc: 'Graduate programs across European universities' },
-    'Postgraduate Diploma': { min: 2.4, desc: 'Professional qualifications' },
-    'Graduate Certificate': { min: 2.2, desc: 'Short-term specialized programs' }
+    // First Class & Second Class Upper (2:1)
+    'Direct Master\'s Degrees': { min: 3.5, desc: 'English-taught programs across European universities (2 years)' },
+    
+    // Second Class Lower (2:2)
+    'Direct Master\'s': { min: 2.4, desc: 'Programs considering overall profile (2 years)' },
+    'Pre-Master\'s Programs': { min: 2.4, desc: 'Foundation pathways to Master\'s (1 year)' },
+    
+    // Third Class & Pass
+    'Foundation Programs': { min: 1.5, desc: 'Preparation for Master\'s studies (1 year)' },
+    'Postgraduate Certificates': { min: 1.0, desc: 'Professional qualification programs (1 year)' }
   }
 };
 
@@ -131,17 +199,42 @@ const normalizeGPA = (cgpa, maxScale) => {
   return (parseFloat(cgpa) / parseFloat(maxScale)) * 5.0;
 };
 
+const getDegreeClass = (normalizedCgpa) => {
+  for (const [degreeClass, range] of Object.entries(DEGREE_CLASSIFICATION)) {
+    if (normalizedCgpa >= range.min && normalizedCgpa <= range.max) {
+      return {
+        class: degreeClass,
+        description: range.description,
+        equivalent: range.equivalent
+      };
+    }
+  }
+  return {
+    class: 'Fail',
+    description: 'Fail',
+    equivalent: '0.00 - 0.99'
+  };
+};
+
 const getEligiblePrograms = (normalizedCgpa, country) => {
   const countryPrograms = PROGRAM_ELIGIBILITY[country];
   const eligible = [];
+  const degreeClass = getDegreeClass(normalizedCgpa);
 
   Object.entries(countryPrograms).forEach(([program, data]) => {
     if (normalizedCgpa >= data.min) {
-      eligible.push({ program, ...data });
+      eligible.push({ 
+        program, 
+        ...data,
+        degreeClass: degreeClass.class
+      });
     }
   });
 
-  return eligible.sort((a, b) => b.min - a.min);
+  return {
+    programs: eligible.sort((a, b) => b.min - a.min),
+    degreeClass: degreeClass
+  };
 };
 
 // ============================================
@@ -149,15 +242,13 @@ const getEligiblePrograms = (normalizedCgpa, country) => {
 // ============================================
 const sendEmailNotification = async (data) => {
   try {
-    // Check if emailjs is available
     if (!window.emailjs) {
       console.error('EmailJS not loaded yet');
       return false;
     }
 
-    // Prepare the email content
-    const eligibleProgramsText = data.eligible.length > 0 
-      ? data.eligible.map((p, index) => 
+    const eligibleProgramsText = data.eligible.programs.length > 0 
+      ? data.eligible.programs.map((p, index) => 
           `${index + 1}. ${p.program} - ${p.desc} (Min CGPA: ${p.min}/5.0)`
         ).join('\n')
       : 'No eligible programs found. Student needs counseling for alternative pathways.';
@@ -169,21 +260,23 @@ const sendEmailNotification = async (data) => {
       student_email: data.studentInfo.email,
       student_phone: data.studentInfo.phone || 'Not provided',
       current_level: data.studentInfo.currentLevel || 'Not provided',
-      field_of_study: data.studentInfo.fieldOfStudy || 'Not provided',
+      field_of_study: data.studentInfo.fieldOfStudy || 'Not provided', // This was missing
       original_cgpa: data.cgpa,
       grading_scale: data.gradingScale,
       normalized_cgpa: data.normalizedCgpa,
+      degree_class: data.eligible.degreeClass.description,
+      equivalent_scale: data.eligible.degreeClass.equivalent,
       destination: data.country,
       eligible_programs: eligibleProgramsText,
-      total_eligible: data.eligible.length,
+      total_eligible: data.eligible.programs.length,
       timestamp: data.timestamp,
       message: `New student eligibility check completed for ${data.studentInfo.fullName}.`,
       subject: `R-Pro ScholarTrack - Eligibility Results for ${data.studentInfo.fullName}`
     };
 
     console.log('Sending email with params:', templateParams);
+    console.log('Field of Study:', templateParams.field_of_study); // Debug log
 
-    // Send email using EmailJS
     const response = await window.emailjs.send(
       CONFIG.email.serviceId,
       CONFIG.email.templateId,
@@ -196,7 +289,6 @@ const sendEmailNotification = async (data) => {
   } catch (error) {
     console.error('EmailJS failed to send:', error);
     
-    // Log detailed error information
     if (error.text) {
       console.error('EmailJS error details:', error.text);
     }
@@ -204,7 +296,6 @@ const sendEmailNotification = async (data) => {
     return false;
   }
 };
-
 // ============================================
 // COMPONENT: Input Field
 // ============================================
@@ -318,15 +409,13 @@ export default function ScholarTrack() {
   });
 
   useEffect(() => {
-    // Load EmailJS script
     const loadEmailJS = async () => {
       if (!window.emailjs) {
         try {
-          // Import EmailJS directly as a module
           const emailJSModule = await import('@emailjs/browser');
           window.emailjs = emailJSModule;
           
-          if (CONFIG.email.publicKey && CONFIG.email.publicKey !== 'YOUR_PUBLIC_KEY') {
+          if (CONFIG.email.publicKey) {
             window.emailjs.init(CONFIG.email.publicKey);
             console.log('EmailJS initialized successfully');
           }
@@ -336,7 +425,6 @@ export default function ScholarTrack() {
       }
     };
 
-    // Load Tawk.to script
     const loadTawkTo = () => {
       if (!window.Tawk_API) {
         const tawkScript = document.createElement('script');
@@ -386,7 +474,6 @@ export default function ScholarTrack() {
       setResults(resultData);
       setActiveTab('results');
       
-      // Send email notification
       await sendNotification(resultData);
     } catch (error) {
       console.error('Error calculating eligibility:', error);
@@ -556,8 +643,10 @@ export default function ScholarTrack() {
                     <h4 className="font-bold text-sm md:text-base text-slate-800 mb-1">{dest.country}</h4>
                     <p className="text-xl md:text-2xl font-bold text-indigo-600 mb-1">{dest.programs}</p>
                     <p className="text-xs text-slate-500">programs</p>
-                    <div className="mt-2 md:mt-3 bg-indigo-50 text-indigo-600 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">
-                      {dest.popular}
+                    <div className="mt-2 md:mt-3">
+                      <div className="inline-block bg-indigo-50 text-indigo-600 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">
+                        {dest.popular}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -761,6 +850,25 @@ export default function ScholarTrack() {
                 <p className="text-sm md:text-base text-slate-600">Based on your academic profile and preferences</p>
               </div>
               
+              {/* Degree Classification Section */}
+              <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl md:rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border-2 border-purple-100">
+                <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-4 flex items-center">
+                  <Award className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mr-2" />
+                  Degree Classification
+                </h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg p-4">
+                    <p className="text-xs text-slate-500 mb-1">Your CGPA Classification</p>
+                    <p className="font-bold text-purple-600 text-lg">{results.eligible.degreeClass.description}</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-4">
+                    <p className="text-xs text-slate-500 mb-1">Equivalent (4.0 Scale)</p>
+                    <p className="font-bold text-purple-600">{results.eligible.degreeClass.equivalent}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Student Information */}
               <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl md:rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border-2 border-indigo-100">
                 <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                   <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
@@ -796,17 +904,17 @@ export default function ScholarTrack() {
                 </div>
               </div>
 
-              {results.eligible.length > 0 ? (
+              {results.eligible.programs.length > 0 ? (
                 <div className="space-y-4 md:space-y-6">
                   <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl md:rounded-2xl p-4 md:p-6 text-white">
                     <h3 className="text-xl md:text-2xl font-bold mb-2">Great News! 🎉</h3>
-                    <p className="text-sm md:text-base text-emerald-50">You're eligible for {results.eligible.length} program{results.eligible.length > 1 ? 's' : ''} in {results.country}</p>
+                    <p className="text-sm md:text-base text-emerald-50">You're eligible for {results.eligible.programs.length} program{results.eligible.programs.length > 1 ? 's' : ''} in {results.country}</p>
                   </div>
 
                   <div>
                     <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-3 md:mb-4">Your Eligible Programs:</h3>
                     <div className="space-y-3 md:space-y-4">
-                      {results.eligible.map((prog, idx) => (
+                      {results.eligible.programs.map((prog, idx) => (
                         <div key={idx} className="border-l-4 border-indigo-500 bg-gradient-to-r from-slate-50 to-indigo-50 p-4 md:p-6 rounded-r-xl md:rounded-r-2xl hover:shadow-lg transition-all group">
                           <div className="flex items-start space-x-3 md:space-x-4">
                             <div className="bg-emerald-100 p-2 rounded-xl group-hover:scale-110 transition-transform flex-shrink-0">
@@ -912,13 +1020,12 @@ export default function ScholarTrack() {
                     <Phone className="w-4 h-4 md:w-5 md:h-5" />
                     <span>Schedule Call</span>
                   </button>
-
-                <button
-                  onClick={() => window.location.href = "mailto:franzor@yahoo.com"}
-                  className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base sm:col-span-2 md:col-span-1">
-                  <Mail className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>Email Us</span>
-                </button>
+                  <button
+                    onClick={() => window.location.href = "mailto:franzor@yahoo.com"}
+                    className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base sm:col-span-2 md:col-span-1">
+                    <Mail className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Email Us</span>
+                  </button>
                 </div>
               </div>
 
