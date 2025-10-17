@@ -260,7 +260,7 @@ const sendEmailNotification = async (data) => {
       student_email: data.studentInfo.email,
       student_phone: data.studentInfo.phone || 'Not provided',
       current_level: data.studentInfo.currentLevel || 'Not provided',
-      field_of_study: data.studentInfo.fieldOfStudy || 'Not provided', // This was missing
+      field_of_study: data.studentInfo.fieldOfStudy || 'Not provided',
       original_cgpa: data.cgpa,
       grading_scale: data.gradingScale,
       normalized_cgpa: data.normalizedCgpa,
@@ -275,7 +275,6 @@ const sendEmailNotification = async (data) => {
     };
 
     console.log('Sending email with params:', templateParams);
-    console.log('Field of Study:', templateParams.field_of_study); // Debug log
 
     const response = await window.emailjs.send(
       CONFIG.email.serviceId,
@@ -296,17 +295,18 @@ const sendEmailNotification = async (data) => {
     return false;
   }
 };
+
 // ============================================
 // COMPONENT: Input Field
 // ============================================
-const InputField = ({ label, type = "text", value, onChange, placeholder, required = false, icon: Icon }) => (
+const InputField = ({ label, type = "text", value, onChange, placeholder, required = false, icon: Icon, disabled = false }) => (
   <div>
     <label className="block text-sm font-semibold text-slate-700 mb-2">
       {label} {required && <span className="text-rose-500">*</span>}
     </label>
     <div className="relative">
       {Icon && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+        <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${disabled ? 'text-slate-300' : 'text-slate-400'}`}>
           <Icon className="w-5 h-5" />
         </div>
       )}
@@ -314,7 +314,12 @@ const InputField = ({ label, type = "text", value, onChange, placeholder, requir
         type={type}
         value={value}
         onChange={onChange}
-        className={`w-full ${Icon ? 'pl-11' : 'pl-4'} pr-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all outline-none text-sm md:text-base`}
+        disabled={disabled}
+        className={`w-full ${Icon ? 'pl-11' : 'pl-4'} pr-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all outline-none text-sm md:text-base ${
+          disabled 
+            ? 'border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed' 
+            : 'border-slate-200 hover:border-slate-300'
+        }`}
         placeholder={placeholder}
       />
     </div>
@@ -324,21 +329,28 @@ const InputField = ({ label, type = "text", value, onChange, placeholder, requir
 // ============================================
 // COMPONENT: Select Field
 // ============================================
-const SelectField = ({ label, value, onChange, options, required = false, icon: Icon }) => (
+const SelectField = ({ label, value, onChange, options, required = false, icon: Icon, disabled = false }) => (
   <div>
     <label className="block text-sm font-semibold text-slate-700 mb-2">
       {label} {required && <span className="text-rose-500">*</span>}
     </label>
     <div className="relative">
       {Icon && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10">
+        <div className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none z-10 ${
+          disabled ? 'text-slate-300' : 'text-slate-400'
+        }`}>
           <Icon className="w-5 h-5" />
         </div>
       )}
       <select
         value={value}
         onChange={onChange}
-        className={`w-full ${Icon ? 'pl-11' : 'pl-4'} pr-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all outline-none appearance-none bg-white text-sm md:text-base`}
+        disabled={disabled}
+        className={`w-full ${Icon ? 'pl-11' : 'pl-4'} pr-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all outline-none appearance-none text-sm md:text-base ${
+          disabled 
+            ? 'border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed' 
+            : 'border-slate-200 hover:border-slate-300 bg-white'
+        }`}
       >
         {options.map((opt, idx) => (
           <option key={idx} value={opt.value}>{opt.label}</option>
@@ -407,6 +419,18 @@ export default function ScholarTrack() {
     currentLevel: '',
     fieldOfStudy: ''
   });
+  
+  // New state to track if personal info is complete
+  const [isPersonalInfoComplete, setIsPersonalInfoComplete] = useState(false);
+
+  // Effect to check if personal info is complete
+  useEffect(() => {
+    const { fullName, email, phone } = studentInfo;
+    const isComplete = fullName.trim() !== '' && 
+                      email.trim() !== '' && 
+                      phone.trim() !== '';
+    setIsPersonalInfoComplete(isComplete);
+  }, [studentInfo]);
 
   useEffect(() => {
     const loadEmailJS = async () => {
@@ -750,14 +774,35 @@ export default function ScholarTrack() {
                     />
                   </div>
                 </div>
+                
+                {/* Completion indicator */}
+                {isPersonalInfoComplete && (
+                  <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center">
+                    <CheckCircle className="w-5 h-5 text-emerald-600 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-emerald-700 font-medium">
+                      Great! You can now proceed to the next sections.
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Academic Info */}
-              <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-purple-100">
-                <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center">
-                  <Calculator className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mr-2" />
-                  Academic Information
-                </h3>
+              {/* Academic Info - Now conditionally faded */}
+              <div className={`rounded-xl md:rounded-2xl p-4 md:p-6 border-2 transition-all duration-300 ${
+                isPersonalInfoComplete 
+                  ? 'bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-100' 
+                  : 'bg-gray-50 border-gray-200 opacity-60'
+              }`}>
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                  <h3 className="text-lg md:text-xl font-bold text-slate-800 flex items-center">
+                    <Calculator className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mr-2" />
+                    Academic Information
+                  </h3>
+                  {!isPersonalInfoComplete && (
+                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
+                      Complete personal info first
+                    </span>
+                  )}
+                </div>
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-5">
                   <InputField
@@ -767,12 +812,14 @@ export default function ScholarTrack() {
                     onChange={(e) => setCgpa(e.target.value)}
                     placeholder="e.g., 3.5"
                     required
+                    disabled={!isPersonalInfoComplete}
                   />
                   <SelectField
                     label="Grading Scale"
                     value={maxCgpa}
                     onChange={(e) => setMaxCgpa(e.target.value)}
                     required
+                    disabled={!isPersonalInfoComplete}
                     options={[
                       { value: '4.0', label: '4.0 Scale (US Standard)' },
                       { value: '5.0', label: '5.0 Scale (Nigerian Standard)' },
@@ -783,12 +830,23 @@ export default function ScholarTrack() {
                 </div>
               </div>
 
-              {/* Study Destination */}
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-indigo-100">
-                <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center">
-                  <Globe className="w-5 h-5 md:w-6 md:h-6 text-indigo-600 mr-2" />
-                  Study Destination
-                </h3>
+              {/* Study Destination - Now conditionally faded */}
+              <div className={`rounded-xl md:rounded-2xl p-4 md:p-6 border-2 transition-all duration-300 ${
+                isPersonalInfoComplete 
+                  ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100' 
+                  : 'bg-gray-50 border-gray-200 opacity-60'
+              }`}>
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                  <h3 className="text-lg md:text-xl font-bold text-slate-800 flex items-center">
+                    <Globe className="w-5 h-5 md:w-6 md:h-6 text-indigo-600 mr-2" />
+                    Study Destination
+                  </h3>
+                  {!isPersonalInfoComplete && (
+                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
+                      Complete personal info first
+                    </span>
+                  )}
+                </div>
 
                 <SelectField
                   label="Preferred Study Destination"
@@ -796,6 +854,7 @@ export default function ScholarTrack() {
                   onChange={(e) => setCountry(e.target.value)}
                   required
                   icon={MapPin}
+                  disabled={!isPersonalInfoComplete}
                   options={[
                     { value: '', label: 'Select a country' },
                     { value: 'Canada', label: '🇨🇦 Canada' },
@@ -815,9 +874,9 @@ export default function ScholarTrack() {
 
               <button
                 onClick={handleCalculate}
-                disabled={isLoading}
+                disabled={isLoading || !isPersonalInfoComplete || !cgpa || !country}
                 className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-4 md:py-5 rounded-xl transition-all font-bold flex items-center justify-center space-x-2 md:space-x-3 text-base md:text-lg shadow-lg hover:shadow-xl ${
-                  isLoading 
+                  isLoading || !isPersonalInfoComplete || !cgpa || !country
                     ? 'opacity-50 cursor-not-allowed' 
                     : 'hover:from-indigo-600 hover:to-purple-600'
                 }`}
@@ -826,6 +885,11 @@ export default function ScholarTrack() {
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                     <span>Processing...</span>
+                  </>
+                ) : !isPersonalInfoComplete ? (
+                  <>
+                    <User className="w-5 h-5 md:w-6 md:h-6" />
+                    <span>Complete Personal Information First</span>
                   </>
                 ) : (
                   <>
