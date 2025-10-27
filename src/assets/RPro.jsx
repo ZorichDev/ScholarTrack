@@ -5,8 +5,8 @@ import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRigh
 // CONFIGURATION CONSTANTS
 const CONFIG = {
   email: {
-    recipient: "francis1chinazor@gmail.com",
-    cc: "hilda.chijioke@rprogroup.com,admin@rprogroup.com",
+    recipient: "custormercare@rprogroup.net",
+    cc: "admin@rprogroup.com",
     serviceId: "service_ptzp7rd",
     templateId: "template_rjb0396",
     publicKey: "3PD5AyCly9DCyS4u1"
@@ -966,15 +966,27 @@ export default function ScholarTrack() {
       <footer className="bg-slate-900 text-white mt-12 md:mt-16 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
-            <div>
-              <h4 className="font-bold mb-4 text-base md:text-lg">R-Pro ScholarTrack</h4>
-              <p className="text-slate-400 text-xs md:text-sm">Your trusted partner for international education opportunities.</p>
-            </div>
+             <div className="flex items-center gap-3">
+              <img 
+              src={logo} 
+              alt="R-Pro ScholarTrack Logo" 
+              className="w-8 h-8 md:w-10 md:h-10 object-contain"
+               />
+
+              <div className="flex flex-col">
+              <h4 className="font-bold text-base md:text-lg text-white mb-1">
+               R-Pro ScholarTrack
+              </h4>
+              <p className="text-slate-400 text-xs md:text-sm">
+              Your trusted partner for international education opportunities.
+              </p>
+              </div>
+              </div>
             <div>
               <h4 className="font-bold mb-4 text-sm md:text-base">Contact</h4>
               <div className="space-y-2 text-xs md:text-sm text-slate-400">
                 <p className="flex items-center"><Mail className="w-4 h-4 mr-2" /> {CONFIG.email.recipient}</p>
-                <p className="flex items-center"><Phone className="w-4 h-4 mr-2" /> +234 XXX XXX XXXX</p>
+                <p className="flex items-center"><Phone className="w-4 h-4 mr-2" /> +(234) 0903 663 0650</p>
               </div>
             </div>
             <div>
@@ -996,7 +1008,8 @@ export default function ScholarTrack() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-6 text-center text-xs md:text-sm text-slate-400">
-            <p>&copy; 2024 R-Pro Educational Consultancy. All rights reserved.</p>
+            <p> &copy; 2025 <a href="https://www.rproabroadconsult.com/" class="text-blue-500 hover:underline">R-Pro ScholarTrack</a>. All rights reserved.</p>
+
           </div>
         </div>
       </footer>
