@@ -3,7 +3,6 @@ import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone, User, BookOpen, MapPin, Award, TrendingUp, Users, Clock, Star, Shield, Zap, Target } from 'lucide-react';
 
 // CONFIGURATION CONSTANTS
-// ============================================
 const CONFIG = {
   email: {
     recipient: "francis1chinazor@gmail.com",
@@ -59,59 +58,34 @@ const DEGREE_CLASSIFICATION = {
 
 const PROGRAM_ELIGIBILITY = {
   'Canada': {
-    // First Class & Second Class Upper (2:1)
     'Direct Master\'s Degrees': { min: 3.5, desc: 'Full graduate degree programs at top universities (1-2 years)' },
     'Direct PhD Pathways': { min: 4.5, desc: 'Research-focused doctoral programs with funding opportunities (4-6 years)' },
-    
-    // Second Class Lower (2:2)
     'Graduate Certificates/Diplomas': { min: 2.4, desc: 'Professional development programs (8-12 months)' },
-    
-    // Third Class & Pass
     'Postgraduate Diplomas': { min: 1.5, desc: 'Advanced diploma programs for career advancement (1 year)' },
     'Pathway Programs': { min: 1.0, desc: 'Preparation for further graduate studies (1 year)' }
   },
   'UK': {
-    // First Class & Second Class Upper (2:1)
     'Direct Master\'s Degrees': { min: 3.5, desc: 'Taught and research programs at top universities (1 year)' },
-    
-    // Second Class Lower (2:2)
     'Pre-Master\'s Pathway': { min: 2.4, desc: 'Preparation programs for Master\'s entry (6-9 months)' },
-    
-    // Third Class & Pass
     'Pathway Programs': { min: 1.5, desc: 'Pre-Master\'s and foundation programs (9-12 months)' },
     'Graduate Entry Foundation': { min: 1.0, desc: 'One-year foundational studies program (1 year)' }
   },
   'USA': {
-    // First Class & Second Class Upper (2:1)
     'Direct Master\'s Degrees': { min: 3.5, desc: 'Graduate programs at top-ranked universities (2 years)' },
     'Direct PhD Pathways': { min: 4.5, desc: 'Fully-funded doctoral programs with stipends (5-6 years)' },
-    
-    // Second Class Lower (2:2)
     'Master\'s Programs': { min: 2.4, desc: 'Graduate degrees with pathway options (2 years)' },
-    
-    // Third Class & Pass
     'Bridge/Pathway Programs': { min: 1.5, desc: 'Academic preparation for graduate studies (1-2 years)' }
   },
   'Australia': {
-    // First Class & Second Class Upper (2:1)
     'Direct Master\'s Degrees': { min: 3.5, desc: 'Coursework and research programs at top universities (1.5-2 years)' },
-    
-    // Second Class Lower (2:2)
     'Direct Master\'s': { min: 2.4, desc: 'Graduate programs with work experience consideration (1.5-2 years)' },
-    
-    // Third Class & Pass
     'Postgraduate Diplomas': { min: 1.5, desc: 'Career-focused qualification programs (1 year)' },
     'Graduate Certificates': { min: 1.0, desc: 'Short-term specialized programs (6 months)' }
   },
   'Europe': {
-    // First Class & Second Class Upper (2:1)
     'Direct Master\'s Degrees': { min: 3.5, desc: 'English-taught programs across European universities (2 years)' },
-    
-    // Second Class Lower (2:2)
     'Direct Master\'s': { min: 2.4, desc: 'Programs considering overall profile (2 years)' },
     'Pre-Master\'s Programs': { min: 2.4, desc: 'Foundation pathways to Master\'s (1 year)' },
-    
-    // Third Class & Pass
     'Foundation Programs': { min: 1.5, desc: 'Preparation for Master\'s studies (1 year)' },
     'Postgraduate Certificates': { min: 1.0, desc: 'Professional qualification programs (1 year)' }
   }
@@ -192,9 +166,7 @@ const DESTINATIONS = [
   { country: 'Europe', programs: '900+', flag: '🇪🇺', popular: 'Affordable' }
 ];
 
-// ============================================
 // UTILITY FUNCTIONS
-// ============================================
 const normalizeGPA = (cgpa, maxScale) => {
   return (parseFloat(cgpa) / parseFloat(maxScale)) * 5.0;
 };
@@ -237,9 +209,7 @@ const getEligiblePrograms = (normalizedCgpa, country) => {
   };
 };
 
-// ============================================
 // EMAILJS SERVICE FUNCTION
-// ============================================
 const sendEmailNotification = async (data) => {
   try {
     if (!window.emailjs) {
@@ -274,8 +244,6 @@ const sendEmailNotification = async (data) => {
       subject: `R-Pro ScholarTrack - Eligibility Results for ${data.studentInfo.fullName}`
     };
 
-    console.log('Sending email with params:', templateParams);
-
     const response = await window.emailjs.send(
       CONFIG.email.serviceId,
       CONFIG.email.templateId,
@@ -287,18 +255,11 @@ const sendEmailNotification = async (data) => {
     
   } catch (error) {
     console.error('EmailJS failed to send:', error);
-    
-    if (error.text) {
-      console.error('EmailJS error details:', error.text);
-    }
-    
     return false;
   }
 };
 
-// ============================================
 // COMPONENT: Input Field
-// ============================================
 const InputField = ({ label, type = "text", value, onChange, placeholder, required = false, icon: Icon, disabled = false }) => (
   <div>
     <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -326,9 +287,7 @@ const InputField = ({ label, type = "text", value, onChange, placeholder, requir
   </div>
 );
 
-// ============================================
 // COMPONENT: Select Field
-// ============================================
 const SelectField = ({ label, value, onChange, options, required = false, icon: Icon, disabled = false }) => (
   <div>
     <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -360,9 +319,7 @@ const SelectField = ({ label, value, onChange, options, required = false, icon: 
   </div>
 );
 
-// ============================================
 // COMPONENT: Feature Card
-// ============================================
 const FeatureCard = ({ icon: Icon, title, description, gradient }) => (
   <div className={`bg-gradient-to-br ${gradient} rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
     <div className="bg-white/20 backdrop-blur-sm rounded-lg md:rounded-xl p-2 md:p-3 w-fit mb-3 md:mb-4">
@@ -373,9 +330,7 @@ const FeatureCard = ({ icon: Icon, title, description, gradient }) => (
   </div>
 );
 
-// ============================================
 // COMPONENT: Stat Card
-// ============================================
 const StatCard = ({ number, label, icon: Icon }) => (
   <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
     <Icon className="w-8 h-8 md:w-10 md:h-10 text-indigo-600 mb-2 md:mb-3" />
@@ -384,9 +339,7 @@ const StatCard = ({ number, label, icon: Icon }) => (
   </div>
 );
 
-// ============================================
 // COMPONENT: Testimonial Card
-// ============================================
 const TestimonialCard = ({ name, program, text, rating }) => (
   <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-all">
     <div className="flex mb-3">
@@ -402,9 +355,7 @@ const TestimonialCard = ({ name, program, text, rating }) => (
   </div>
 );
 
-// ============================================
 // MAIN COMPONENT
-// ============================================
 export default function ScholarTrack() {
   const [activeTab, setActiveTab] = useState('home');
   const [cgpa, setCgpa] = useState('');
@@ -419,18 +370,13 @@ export default function ScholarTrack() {
     currentLevel: '',
     fieldOfStudy: ''
   });
-  
-  // New state to track if personal info is complete
-  const [isPersonalInfoComplete, setIsPersonalInfoComplete] = useState(false);
 
-  // Effect to check if personal info is complete
-  useEffect(() => {
-    const { fullName, email, phone } = studentInfo;
-    const isComplete = fullName.trim() !== '' && 
-                      email.trim() !== '' && 
-                      phone.trim() !== '';
-    setIsPersonalInfoComplete(isComplete);
-  }, [studentInfo]);
+  const isPersonalInfoComplete = 
+    studentInfo.fullName.trim() !== '' && 
+    studentInfo.email.trim() !== '' && 
+    studentInfo.phone.trim() !== '' && 
+    studentInfo.currentLevel !== '' && 
+    studentInfo.fieldOfStudy.trim() !== '';
 
   useEffect(() => {
     const loadEmailJS = async () => {
@@ -462,10 +408,6 @@ export default function ScholarTrack() {
 
     loadEmailJS();
     loadTawkTo();
-
-    return () => {
-      // Cleanup if needed
-    };
   }, []);
 
   const handleCalculate = async () => {
@@ -474,7 +416,7 @@ export default function ScholarTrack() {
       return;
     }
 
-    if (!studentInfo.fullName || !studentInfo.email || !studentInfo.phone) {
+    if (!isPersonalInfoComplete) {
       alert('Please fill in all required personal information');
       return;
     }
@@ -532,12 +474,11 @@ export default function ScholarTrack() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-      {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 shadow-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-5 flex items-center justify-between">
           <div className="flex items-center space-x-2 md:space-x-3">
-            <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br rounded-xl flex items-center justify-center shadow-lg">
-              <img src={logo} alt="Logo" className="w-10 h-10 md:w-11 md:h-11 text-white" />
+            <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+              <img src={logo} alt="logo" className="w-5 md:w-6 md:h-6 object-contain"/>
             </div>
             <div>
               <h1 className="text-lg md:text-2xl font-bold text-white">R-Pro ScholarTrack</h1>
@@ -556,7 +497,6 @@ export default function ScholarTrack() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-        {/* Navigation */}
         <div className="flex space-x-2 mb-6 md:mb-8 bg-white rounded-xl md:rounded-2xl p-1.5 md:p-2 shadow-lg overflow-x-auto">
           {['home', 'calculator', results && 'results'].filter(Boolean).map(tab => (
             <button
@@ -573,10 +513,8 @@ export default function ScholarTrack() {
           ))}
         </div>
 
-        {/* Home Tab */}
         {activeTab === 'home' && (
           <div className="space-y-8 md:space-y-12">
-            {/* Hero Section */}
             <div className="bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-10 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10"></div>
               <div className="relative z-10">
@@ -606,14 +544,12 @@ export default function ScholarTrack() {
               </div>
             </div>
 
-            {/* Stats Section */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               {STATS.map((stat, idx) => (
                 <StatCard key={idx} {...stat} />
               ))}
             </div>
 
-            {/* Features Section */}
             <div>
               <div className="text-center mb-6 md:mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Why Choose R-Pro ScholarTrack?</h3>
@@ -641,7 +577,6 @@ export default function ScholarTrack() {
               </div>
             </div>
 
-            {/* Services Section */}
             <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-10">
               <div className="text-center mb-6 md:mb-10">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Our Comprehensive Services</h3>
@@ -654,7 +589,6 @@ export default function ScholarTrack() {
               </div>
             </div>
 
-            {/* Destinations Section */}
             <div>
               <div className="text-center mb-6 md:mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Popular Study Destinations</h3>
@@ -662,26 +596,22 @@ export default function ScholarTrack() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                 {DESTINATIONS.map((dest, idx) => (
-                  <div key={idx} className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 text-center">
-                    <div className="text-3xl md:text-5xl mb-2 md:mb-3">{dest.flag}</div>
-                    <h4 className="font-bold text-sm md:text-base text-slate-800 mb-1">{dest.country}</h4>
-                    <p className="text-xl md:text-2xl font-bold text-indigo-600 mb-1">{dest.programs}</p>
-                    <p className="text-xs text-slate-500">programs</p>
-                    <div className="mt-2 md:mt-3">
-                      <div className="inline-block bg-indigo-50 text-indigo-600 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">
-                        {dest.popular}
-                      </div>
+                  <div key={idx} className="bg-white rounded-xl md:rounded-2xl p-4 md:p-5 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 text-center">
+                    <div className="text-4xl mb-3">{dest.flag}</div>
+                    <div className="font-bold text-slate-800 mb-1 text-sm md:text-base">{dest.country}</div>
+                    <div className="text-xs md:text-sm text-indigo-600 font-semibold mb-2">{dest.programs} Programs</div>
+                    <div className="inline-block bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 px-2 md:px-3 py-1 rounded-full text-xs font-medium">
+                      {dest.popular}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Testimonials Section */}
-            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl md:rounded-3xl p-6 md:p-10">
-              <div className="text-center mb-6 md:mb-10">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Success Stories</h3>
-                <p className="text-sm md:text-base text-slate-600">Hear from students who achieved their dreams with R-Pro</p>
+            <div>
+              <div className="text-center mb-6 md:mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">What Our Students Say</h3>
+                <p className="text-sm md:text-base text-slate-600">Success stories from students we've helped</p>
               </div>
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {TESTIMONIALS.map((testimonial, idx) => (
@@ -690,477 +620,383 @@ export default function ScholarTrack() {
               </div>
             </div>
 
-            {/* CTA Section */}
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl md:rounded-3xl p-6 md:p-10 text-center text-white shadow-2xl">
-              <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Ready to Start Your Journey?</h3>
-              <p className="text-indigo-100 mb-4 md:mb-6 text-sm md:text-base lg:text-lg max-w-2xl mx-auto">
-                Join thousands of successful students who have achieved their study abroad dreams with R-Pro. 
-                Get your free eligibility assessment now!
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-10 text-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">Ready to Start Your Journey?</h3>
+              <p className="text-indigo-100 mb-6 md:mb-8 max-w-2xl mx-auto text-sm md:text-base">
+                Join thousands of successful students who have achieved their dreams of studying abroad with R-Pro.
               </p>
-              <button
-                onClick={() => setActiveTab('calculator')}
-                className="bg-white text-indigo-600 px-6 md:px-10 py-3 md:py-4 rounded-xl hover:shadow-2xl transition-all font-bold text-base md:text-lg inline-flex items-center space-x-2 md:space-x-3 hover:-translate-y-1"
-              >
-                <span>Check Your Eligibility Now</span>
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
+                <button
+                  onClick={() => setActiveTab('calculator')}
+                  className="bg-white text-indigo-600 px-6 md:px-8 py-3 md:py-4 rounded-xl hover:shadow-2xl transition-all font-semibold flex items-center justify-center space-x-2 hover:-translate-y-1 text-sm md:text-base"
+                >
+                  <Calculator className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Check Eligibility Now</span>
+                </button>
+                <button
+                  onClick={openChat}
+                  className="bg-white/10 backdrop-blur-sm text-white border-2 border-white px-6 md:px-8 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base"
+                >
+                  <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Talk to Counselor</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Calculator Tab */}
         {activeTab === 'calculator' && (
-          <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-4 md:p-8">
-            <div className="text-center mb-6 md:mb-8">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-800 mb-2 md:mb-3">Check Your Program Eligibility</h2>
-              <p className="text-sm md:text-base lg:text-lg text-slate-600">Fill in your details to discover which programs you qualify for</p>
-            </div>
-            
-            <div className="space-y-6 md:space-y-8">
-              {/* Personal Info */}
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-indigo-100">
-                <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center">
-                  <User className="w-5 h-5 md:w-6 md:h-6 text-indigo-600 mr-2" />
-                  Personal Information
-                </h3>
-                
-                <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-                  <InputField
-                    label="Full Name"
-                    value={studentInfo.fullName}
-                    onChange={(e) => setStudentInfo({...studentInfo, fullName: e.target.value})}
-                    placeholder="John Doe"
-                    required
-                    icon={User}
-                  />
-                  <InputField
-                    label="Email Address"
-                    type="email"
-                    value={studentInfo.email}
-                    onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
-                    placeholder="john@example.com"
-                    required
-                    icon={Mail}
-                  />
-                  <InputField
-                    label="Phone Number"
-                    type="tel"
-                    value={studentInfo.phone}
-                    onChange={(e) => setStudentInfo({...studentInfo, phone: e.target.value})}
-                    placeholder="+234 800 000 0000"
-                    required
-                    icon={Phone}
-                  />
-                  <SelectField
-                    label="Current Education Level"
-                    value={studentInfo.currentLevel}
-                    onChange={(e) => setStudentInfo({...studentInfo, currentLevel: e.target.value})}
-                    icon={GraduationCap}
-                    options={[
-                      { value: '', label: 'Select level' },
-                      { value: "Bachelor's Degree", label: "Bachelor's Degree" },
-                      { value: 'HND', label: 'HND' },
-                      { value: "Master's Degree", label: "Master's Degree" },
-                      { value: 'Other', label: 'Other' }
-                    ]}
-                  />
-                  <div className="md:col-span-2">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-10">
+              <div className="text-center mb-6 md:mb-8">
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Calculator className="w-7 h-7 md:w-8 md:h-8 text-white" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Check Your Eligibility</h2>
+                <p className="text-sm md:text-base text-slate-600">Enter your details to discover programs you qualify for</p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 md:p-5 border border-indigo-100">
+                  <h3 className="font-bold text-slate-800 mb-3 flex items-center text-sm md:text-base">
+                    <User className="w-5 h-5 mr-2 text-indigo-600" />
+                    Personal Information
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <InputField
-                      label="Field of Study"
-                      value={studentInfo.fieldOfStudy}
-                      onChange={(e) => setStudentInfo({...studentInfo, fieldOfStudy: e.target.value})}
-                      placeholder="e.g., Computer Science, Business Administration"
-                      icon={BookOpen}
+                      label="Full Name"
+                      value={studentInfo.fullName}
+                      onChange={(e) => setStudentInfo({...studentInfo, fullName: e.target.value})}
+                      placeholder="Enter your full name"
+                      required
+                      icon={User}
+                    />
+                    <InputField
+                      label="Email Address"
+                      type="email"
+                      value={studentInfo.email}
+                      onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
+                      placeholder="your.email@example.com"
+                      required
+                      icon={Mail}
+                    />
+                    <InputField
+                      label="Phone Number"
+                      type="tel"
+                      value={studentInfo.phone}
+                      onChange={(e) => setStudentInfo({...studentInfo, phone: e.target.value})}
+                      placeholder="+234 XXX XXX XXXX"
+                      required
+                      icon={Phone}
+                    />
+                    <SelectField
+                      label="Current Level"
+                      value={studentInfo.currentLevel}
+                      onChange={(e) => setStudentInfo({...studentInfo, currentLevel: e.target.value})}
+                      required
+                      icon={GraduationCap}
+                      options={[
+                        { value: '', label: 'Select your level' },
+                        { value: 'Undergraduate (Final Year)', label: 'Undergraduate (Final Year)' },
+                        { value: 'Bachelor\'s Degree Graduate', label: 'Bachelor\'s Degree Graduate' },
+                        { value: 'Master\'s Degree Graduate', label: 'Master\'s Degree Graduate' },
+                        { value: 'Other', label: 'Other' }
+                      ]}
+                    />
+                    <div className="sm:col-span-2">
+                      <InputField
+                        label="Field of Study"
+                        value={studentInfo.fieldOfStudy}
+                        onChange={(e) => setStudentInfo({...studentInfo, fieldOfStudy: e.target.value})}
+                        placeholder="e.g., Computer Science, Business Administration"
+                        required
+                        icon={BookOpen}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 md:p-5 border border-blue-100">
+                  <h3 className="font-bold text-slate-800 mb-3 flex items-center text-sm md:text-base">
+                    <Calculator className="w-5 h-5 mr-2 text-indigo-600" />
+                    Academic Information
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <InputField
+                      label="Your CGPA"
+                      type="number"
+                      step="0.01"
+                      value={cgpa}
+                      onChange={(e) => setCgpa(e.target.value)}
+                      placeholder="e.g., 3.50"
+                      required
+                      disabled={!isPersonalInfoComplete}
+                    />
+                    <SelectField
+                      label="Grading Scale"
+                      value={maxCgpa}
+                      onChange={(e) => setMaxCgpa(e.target.value)}
+                      required
+                      disabled={!isPersonalInfoComplete}
+                      options={[
+                        { value: '4.0', label: '4.0 Scale (US Standard)' },
+                        { value: '5.0', label: '5.0 Scale (Nigerian Standard)' },
+                        { value: '7.0', label: '7.0 Scale' },
+                        { value: '10.0', label: '10.0 Scale' }
+                      ]}
                     />
                   </div>
                 </div>
-                
-                {/* Completion indicator */}
-                {isPersonalInfoComplete && (
-                  <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center">
-                    <CheckCircle className="w-5 h-5 text-emerald-600 mr-2 flex-shrink-0" />
-                    <span className="text-sm text-emerald-700 font-medium">
-                      Great! You can now proceed to the next sections.
-                    </span>
-                  </div>
-                )}
-              </div>
 
-              {/* Academic Info - Now conditionally faded */}
-              <div className={`rounded-xl md:rounded-2xl p-4 md:p-6 border-2 transition-all duration-300 ${
-                isPersonalInfoComplete 
-                  ? 'bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-100' 
-                  : 'bg-gray-50 border-gray-200 opacity-60'
-              }`}>
-                <div className="flex items-center justify-between mb-4 md:mb-6">
-                  <h3 className="text-lg md:text-xl font-bold text-slate-800 flex items-center">
-                    <Calculator className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mr-2" />
-                    Academic Information
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 md:p-5 border border-purple-100">
+                  <h3 className="font-bold text-slate-800 mb-3 flex items-center text-sm md:text-base">
+                    <Globe className="w-5 h-5 mr-2 text-indigo-600" />
+                    Preferred Destination
                   </h3>
-                  {!isPersonalInfoComplete && (
-                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
-                      Complete personal info first
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-                  <InputField
-                    label="Your CGPA"
-                    type="number"
-                    value={cgpa}
-                    onChange={(e) => setCgpa(e.target.value)}
-                    placeholder="e.g., 3.5"
-                    required
-                    disabled={!isPersonalInfoComplete}
-                  />
                   <SelectField
-                    label="Grading Scale"
-                    value={maxCgpa}
-                    onChange={(e) => setMaxCgpa(e.target.value)}
+                    label="Study Destination"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
                     required
+                    icon={MapPin}
                     disabled={!isPersonalInfoComplete}
                     options={[
-                      { value: '4.0', label: '4.0 Scale (US Standard)' },
-                      { value: '5.0', label: '5.0 Scale (Nigerian Standard)' },
-                      { value: '7.0', label: '7.0 Scale' },
-                      { value: '10.0', label: '10.0 Scale' }
+                      { value: '', label: 'Select a country' },
+                      { value: 'Canada', label: '🇨🇦 Canada' },
+                      { value: 'UK', label: '🇬🇧 United Kingdom' },
+                      { value: 'USA', label: '🇺🇸 United States' },
+                      { value: 'Australia', label: '🇦🇺 Australia' },
+                      { value: 'Europe', label: '🇪🇺 Europe' }
                     ]}
                   />
                 </div>
-              </div>
 
-              {/* Study Destination - Now conditionally faded */}
-              <div className={`rounded-xl md:rounded-2xl p-4 md:p-6 border-2 transition-all duration-300 ${
-                isPersonalInfoComplete 
-                  ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100' 
-                  : 'bg-gray-50 border-gray-200 opacity-60'
-              }`}>
-                <div className="flex items-center justify-between mb-4 md:mb-6">
-                  <h3 className="text-lg md:text-xl font-bold text-slate-800 flex items-center">
-                    <Globe className="w-5 h-5 md:w-6 md:h-6 text-indigo-600 mr-2" />
-                    Study Destination
-                  </h3>
-                  {!isPersonalInfoComplete && (
-                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
-                      Complete personal info first
-                    </span>
-                  )}
-                </div>
-
-                <SelectField
-                  label="Preferred Study Destination"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  required
-                  icon={MapPin}
-                  disabled={!isPersonalInfoComplete}
-                  options={[
-                    { value: '', label: 'Select a country' },
-                    { value: 'Canada', label: '🇨🇦 Canada' },
-                    { value: 'UK', label: '🇬🇧 United Kingdom' },
-                    { value: 'USA', label: '🇺🇸 United States' },
-                    { value: 'Australia', label: '🇦🇺 Australia' },
-                    { value: 'Europe', label: '🇪🇺 Europe' }
-                  ]}
-                />
-              </div>
-
-              <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4">
-                <p className="text-xs md:text-sm text-slate-700">
-                  <strong className="text-amber-700">Note:</strong> Your information will be sent to our counseling team for follow-up consultation.
-                </p>
-              </div>
-
-              <button
-                onClick={handleCalculate}
-                disabled={isLoading || !isPersonalInfoComplete || !cgpa || !country}
-                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-4 md:py-5 rounded-xl transition-all font-bold flex items-center justify-center space-x-2 md:space-x-3 text-base md:text-lg shadow-lg hover:shadow-xl ${
-                  isLoading || !isPersonalInfoComplete || !cgpa || !country
-                    ? 'opacity-50 cursor-not-allowed' 
-                    : 'hover:from-indigo-600 hover:to-purple-600'
-                }`}
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>Processing...</span>
-                  </>
-                ) : !isPersonalInfoComplete ? (
-                  <>
-                    <User className="w-5 h-5 md:w-6 md:h-6" />
-                    <span>Complete Personal Information First</span>
-                  </>
-                ) : (
-                  <>
-                    <Calculator className="w-5 h-5 md:w-6 md:h-6" />
-                    <span>Calculate My Eligibility</span>
-                  </>
+                {!isPersonalInfoComplete && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start space-x-3">
+                    <div className="text-amber-600 mt-0.5">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-amber-800">Complete Personal Information Required</p>
+                      <p className="text-xs text-amber-700 mt-1">Please fill in all personal information fields above before entering your academic details.</p>
+                    </div>
+                  </div>
                 )}
-              </button>
+
+                <button
+                  onClick={handleCalculate}
+                  disabled={isLoading || !cgpa || !country || !isPersonalInfoComplete}
+                  className={`w-full py-4 md:py-5 rounded-xl font-bold text-base md:text-lg transition-all flex items-center justify-center space-x-3 ${
+                    isLoading || !cgpa || !country || !isPersonalInfoComplete
+                      ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl hover:-translate-y-1'
+                  }`}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Calculating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5 md:w-6 md:h-6" />
+                      <span>Calculate My Eligibility</span>
+                    </>
+                  )}
+                </button>
+
+                <div className="text-center text-xs md:text-sm text-slate-500">
+                  By submitting, you agree to receive guidance from R-Pro education consultants
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Results Tab */}
         {activeTab === 'results' && results && (
-          <div className="space-y-4 md:space-y-6">
-            <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-4 md:p-8">
-              <div className="text-center mb-6 md:mb-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full mb-3 md:mb-4">
-                  <CheckCircle className="w-7 h-7 md:w-10 md:h-10 text-white" />
+          <div className="max-w-5xl mx-auto space-y-6">
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold">Your Eligibility Results</h2>
+                <div className="bg-white/20 backdrop-blur-sm rounded-xl px-3 md:px-4 py-2">
+                  <div className="text-xs md:text-sm text-indigo-200">Normalized CGPA</div>
+                  <div className="text-xl md:text-2xl font-bold">{results.normalizedCgpa}/5.0</div>
                 </div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-800 mb-2">Your Eligibility Results</h2>
-                <p className="text-sm md:text-base text-slate-600">Based on your academic profile and preferences</p>
               </div>
-              
-              {/* Degree Classification Section */}
-              <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl md:rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border-2 border-purple-100">
-                <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-4 flex items-center">
-                  <Award className="w-5 h-5 md:w-6 md:h-6 text-purple-600 mr-2" />
-                  Degree Classification
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="text-indigo-200 text-xs md:text-sm mb-1">Original CGPA</div>
+                  <div className="text-xl md:text-2xl font-bold">{results.cgpa}/{results.gradingScale}</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="text-indigo-200 text-xs md:text-sm mb-1">Degree Classification</div>
+                  <div className="text-lg md:text-xl font-bold">{results.eligible.degreeClass.description}</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="text-indigo-200 text-xs md:text-sm mb-1">Destination</div>
+                  <div className="text-lg md:text-xl font-bold">{results.country}</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="text-indigo-200 text-xs md:text-sm mb-1">Eligible Programs</div>
+                  <div className="text-xl md:text-2xl font-bold">{results.eligible.programs.length}</div>
+                </div>
+              </div>
+            </div>
+
+            {results.eligible.programs.length > 0 ? (
+              <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-8">
+                <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                  <CheckCircle className="w-6 h-6 md:w-7 md:h-7 text-green-600 mr-3" />
+                  Programs You Qualify For
                 </h3>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="bg-white rounded-lg p-4">
-                    <p className="text-xs text-slate-500 mb-1">Your CGPA Classification</p>
-                    <p className="font-bold text-purple-600 text-lg">{results.eligible.degreeClass.description}</p>
-                  </div>
-                  <div className="bg-white rounded-lg p-4">
-                    <p className="text-xs text-slate-500 mb-1">Equivalent (4.0 Scale)</p>
-                    <p className="font-bold text-purple-600">{results.eligible.degreeClass.equivalent}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Student Information */}
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl md:rounded-2xl p-4 md:p-6 mb-6 md:mb-8 border-2 border-indigo-100">
-                <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Student Name</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base break-words">{results.studentInfo.fullName}</p>
-                  </div>
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Email Address</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base break-all">{results.studentInfo.email}</p>
-                  </div>
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Your CGPA</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base">{results.cgpa} (on {results.gradingScale} scale)</p>
-                  </div>
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Normalized CGPA</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base">{results.normalizedCgpa}/5.0</p>
-                  </div>
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Study Destination</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base">{results.country}</p>
-                  </div>
-                  <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-4">
-                    <p className="text-xs text-slate-500 mb-1">Field of Study</p>
-                    <p className="font-bold text-indigo-600 text-sm md:text-base">{results.studentInfo.fieldOfStudy || 'Not specified'}</p>
-                  </div>
-                </div>
-                <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-indigo-200 bg-emerald-50 rounded-xl p-3">
-                  <p className="text-xs md:text-sm text-emerald-700 font-semibold flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-                    Results sent to our counseling team - expect contact within 24 hours
-                  </p>
-                </div>
-              </div>
-
-              {results.eligible.programs.length > 0 ? (
-                <div className="space-y-4 md:space-y-6">
-                  <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl md:rounded-2xl p-4 md:p-6 text-white">
-                    <h3 className="text-xl md:text-2xl font-bold mb-2">Great News! 🎉</h3>
-                    <p className="text-sm md:text-base text-emerald-50">You're eligible for {results.eligible.programs.length} program{results.eligible.programs.length > 1 ? 's' : ''} in {results.country}</p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-3 md:mb-4">Your Eligible Programs:</h3>
-                    <div className="space-y-3 md:space-y-4">
-                      {results.eligible.programs.map((prog, idx) => (
-                        <div key={idx} className="border-l-4 border-indigo-500 bg-gradient-to-r from-slate-50 to-indigo-50 p-4 md:p-6 rounded-r-xl md:rounded-r-2xl hover:shadow-lg transition-all group">
-                          <div className="flex items-start space-x-3 md:space-x-4">
-                            <div className="bg-emerald-100 p-2 rounded-xl group-hover:scale-110 transition-transform flex-shrink-0">
-                              <CheckCircle className="w-5 h-5 md:w-7 md:h-7 text-emerald-600" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-lg md:text-xl text-slate-800 mb-2">{prog.program}</h4>
-                              <p className="text-sm md:text-base text-slate-600 mb-3">{prog.desc}</p>
-                              <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm">
-                                <div className="bg-white px-2 md:px-3 py-1 rounded-lg whitespace-nowrap">
-                                  <span className="text-slate-500">Minimum CGPA: </span>
-                                  <span className="font-bold text-indigo-600">{prog.min}/5.0</span>
-                                </div>
-                                <div className="bg-emerald-100 text-emerald-700 px-2 md:px-3 py-1 rounded-lg font-semibold whitespace-nowrap">
-                                  ✓ Qualified
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Additional Information */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-blue-200">
-                    <h4 className="font-bold text-base md:text-lg text-slate-800 mb-3 flex items-center">
-                      <Award className="w-4 h-4 md:w-5 md:h-5 text-blue-600 mr-2 flex-shrink-0" />
-                      What Happens Next?
-                    </h4>
-                    <ul className="space-y-2 text-sm md:text-base text-slate-700">
-                      <li className="flex items-start">
-                        <span className="text-blue-600 mr-2 flex-shrink-0">1.</span>
-                        <span>Our counselors will review your profile within 24 hours</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-blue-600 mr-2 flex-shrink-0">2.</span>
-                        <span>We'll recommend specific universities and programs tailored to your goals</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-blue-600 mr-2 flex-shrink-0">3.</span>
-                        <span>You'll receive guidance on applications, scholarships, and visa processes</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-blue-600 mr-2 flex-shrink-0">4.</span>
-                        <span>We'll support you through every step until you're settled abroad</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4 md:space-y-6">
-                  <div className="bg-amber-50 border-2 border-amber-200 rounded-xl md:rounded-2xl p-4 md:p-6">
-                    <div className="flex items-start space-x-3 md:space-x-4">
-                      <div className="bg-amber-100 p-2 md:p-3 rounded-xl flex-shrink-0">
-                        <Award className="w-6 h-6 md:w-8 md:h-8 text-amber-600" />
+                <div className="space-y-4">
+                  {results.eligible.programs.map((program, idx) => (
+                    <div key={idx} className="border-2 border-slate-200 rounded-xl p-4 md:p-5 hover:border-indigo-300 hover:shadow-lg transition-all">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="text-base md:text-lg font-bold text-slate-800 flex-1">{program.program}</h4>
+                        <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold ml-2">
+                          Eligible ✓
+                        </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-base md:text-lg text-slate-800 mb-2">Don't Worry - We Have Options!</h4>
-                        <p className="text-sm md:text-base text-slate-700 mb-4">
-                          Based on your current CGPA, you may not meet the minimum requirements for standard programs in {results.country}. 
-                          However, R-Pro specializes in finding alternative pathways for students in your situation.
-                        </p>
-                        <div className="space-y-2 text-xs md:text-sm text-slate-700">
-                          <p className="flex items-center">
-                            <CheckCircle className="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0" />
-                            Foundation and pathway programs
-                          </p>
-                          <p className="flex items-center">
-                            <CheckCircle className="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0" />
-                            Universities with flexible entry requirements
-                          </p>
-                          <p className="flex items-center">
-                            <CheckCircle className="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0" />
-                            Professional experience consideration
-                          </p>
-                          <p className="flex items-center">
-                            <CheckCircle className="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0" />
-                            Alternative study destinations
-                          </p>
-                        </div>
+                      <p className="text-sm md:text-base text-slate-600 mb-3">{program.desc}</p>
+                      <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm text-slate-500">
+                        <span className="flex items-center">
+                          <Award className="w-4 h-4 mr-1 text-indigo-600" />
+                          Min CGPA: {program.min}/5.0
+                        </span>
+                        <span>•</span>
+                        <span>Your CGPA: {results.normalizedCgpa}/5.0</span>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Call to Action */}
-              <div className="mt-6 md:mt-8 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-xl md:rounded-2xl p-6 md:p-8 text-white shadow-2xl">
-                <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">Ready for the Next Step?</h3>
-                <p className="mb-4 md:mb-6 text-sm md:text-base text-indigo-100">Book a free consultation with our expert counselors to discuss your options, application strategy, and scholarship opportunities.</p>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
-                  <button 
-                    onClick={openChat}
-                    className="bg-white text-indigo-600 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:shadow-xl transition-all font-semibold flex items-center justify-center space-x-2 hover:-translate-y-1 text-sm md:text-base"
-                  >
-                    <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
-                    <span>Live Chat</span>
-                  </button>
-                  <button
-                    onClick={() => window.location.href = "tel:+2349069246577"}
-                    className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base">
-                    <Phone className="w-4 h-4 md:w-5 md:h-5" />
-                    <span>Schedule Call</span>
-                  </button>
-                  <button
-                    onClick={() => window.location.href = "mailto:franzor@yahoo.com"}
-                    className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-4 md:px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base sm:col-span-2 md:col-span-1">
-                    <Mail className="w-4 h-4 md:w-5 md:h-5" />
-                    <span>Email Us</span>
-                  </button>
+                  ))}
                 </div>
               </div>
-
-              {/* Download/Print Option */}
-              <div className="text-center">
+            ) : (
+              <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-8 text-center">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 md:w-10 md:h-10 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-3">Alternative Pathways Available</h3>
+                <p className="text-sm md:text-base text-slate-600 mb-6 max-w-2xl mx-auto">
+                  While you may not meet the direct entry requirements, we have alternative pathway programs 
+                  and foundation courses that can help you achieve your study abroad goals.
+                </p>
                 <button
-                    onClick={() => window.print()}
-                    className="text-indigo-600 hover:text-indigo-700 font-semibold underline text-sm md:text-base" >
-                   Download Results as PDF
-                 </button>
+                  onClick={openChat}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold inline-flex items-center space-x-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Speak with a Counselor</span>
+                </button>
+              </div>
+            )}
+
+            <div className="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Next Steps</h3>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-5">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-indigo-500 rounded-lg p-2 mt-1">
+                      <MessageCircle className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1 text-sm md:text-base">Consult with Experts</h4>
+                      <p className="text-indigo-200 text-xs md:text-sm">Speak with our counselors for personalized guidance</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-5">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-purple-500 rounded-lg p-2 mt-1">
+                      <BookOpen className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1 text-sm md:text-base">Prepare Documents</h4>
+                      <p className="text-indigo-200 text-xs md:text-sm">Get your transcripts and documents ready</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-5">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-pink-500 rounded-lg p-2 mt-1">
+                      <Target className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1 text-sm md:text-base">Select Universities</h4>
+                      <p className="text-indigo-200 text-xs md:text-sm">Choose programs that match your profile</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-5">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-cyan-500 rounded-lg p-2 mt-1">
+                      <Shield className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1 text-sm md:text-base">Apply & Get Visa</h4>
+                      <p className="text-indigo-200 text-xs md:text-sm">We handle applications and visa processing</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={openChat}
+                  className="flex-1 bg-white text-indigo-600 px-6 py-3 md:py-4 rounded-xl hover:shadow-2xl transition-all font-semibold flex items-center justify-center space-x-2 text-sm md:text-base"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Book Free Consultation</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('calculator')}
+                  className="flex-1 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-6 py-3 md:py-4 rounded-xl hover:bg-white/20 transition-all font-semibold text-sm md:text-base"
+                >
+                  Check Another Destination
+                </button>
               </div>
             </div>
           </div>
         )}
       </div>
-      
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 text-white mt-12 md:mt-16 py-8 md:py-12">
+
+      <footer className="bg-slate-900 text-white mt-12 md:mt-16 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
-            <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center space-x-2 mb-3 md:mb-4">
-                <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br rounded-lg flex items-center justify-center">
-                    <img src={logo} alt="Logo" className="w-8 h-8 md:w-11 md:h-9 text-white" />
-                </div>
-                <span className="font-bold text-base md:text-lg">R-Pro ScholarTrack</span>
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
+            <div>
+              <h4 className="font-bold mb-4 text-base md:text-lg">R-Pro ScholarTrack</h4>
+              <p className="text-slate-400 text-xs md:text-sm">Your trusted partner for international education opportunities.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-sm md:text-base">Contact</h4>
+              <div className="space-y-2 text-xs md:text-sm text-slate-400">
+                <p className="flex items-center"><Mail className="w-4 h-4 mr-2" /> {CONFIG.email.recipient}</p>
+                <p className="flex items-center"><Phone className="w-4 h-4 mr-2" /> +234 XXX XXX XXXX</p>
               </div>
-              <p className="text-xs md:text-sm text-slate-300">Empowering students to achieve their global education dreams since 2010.</p>
             </div>
-            
             <div>
-              <h4 className="font-bold mb-2 md:mb-3 text-sm md:text-base">Quick Links</h4>
-              <ul className="space-y-1 md:space-y-2 text-xs md:text-sm text-slate-300">
-                <li><a href="#" className="hover:text-white transition">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition">Our Services</a></li>
-                <li><a href="#" className="hover:text-white transition">Success Stories</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-              </ul>
+              <h4 className="font-bold mb-4 text-sm md:text-base">Quick Links</h4>
+              <div className="space-y-2 text-xs md:text-sm text-slate-400">
+                <button onClick={() => setActiveTab('home')} className="block hover:text-white">Home</button>
+                <button onClick={() => setActiveTab('calculator')} className="block hover:text-white">Eligibility Check</button>
+                <button onClick={openChat} className="block hover:text-white">Contact Us</button>
+              </div>
             </div>
-            
             <div>
-              <h4 className="font-bold mb-2 md:mb-3 text-sm md:text-base">Destinations</h4>
-              <ul className="space-y-1 md:space-y-2 text-xs md:text-sm text-slate-300">
-                <li><a href="#" className="hover:text-white transition">Study in Canada</a></li>
-                <li><a href="#" className="hover:text-white transition">Study in UK</a></li>
-                <li><a href="#" className="hover:text-white transition">Study in USA</a></li>
-                <li><a href="#" className="hover:text-white transition">Study in Australia</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-bold mb-2 md:mb-3 text-sm md:text-base">Contact Us</h4>
-              <ul className="space-y-1 md:space-y-2 text-xs md:text-sm text-slate-300">
-                <li className="flex items-center">
-                  <Mail className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                  <a href="mailto:info@rprogroup.com" className="hover:text-white transition break-all">info@rprogroup.com</a>
-                </li>
-                <li className="flex items-center">
-                  <Phone className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                  <a href="tel:+234832248454" className="hover:text-white transition">+234 832 248 454</a>
-                </li>
-                <li className="flex items-center">
-                  <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                  <span>Lagos, Nigeria</span>
-                </li>
-              </ul>
+              <h4 className="font-bold mb-4 text-sm md:text-base">Destinations</h4>
+              <div className="space-y-2 text-xs md:text-sm text-slate-400">
+                <p>Canada</p>
+                <p>United Kingdom</p>
+                <p>United States</p>
+                <p>Australia</p>
+              </div>
             </div>
           </div>
-          
-          <div className="border-t border-slate-700 pt-4 md:pt-6 text-center">
-            <p className="text-xs md:text-sm text-slate-400">© 2025 R-Pro Group. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <div className="border-t border-slate-800 pt-6 text-center text-xs md:text-sm text-slate-400">
+            <p>&copy; 2024 R-Pro Educational Consultancy. All rights reserved.</p>
           </div>
         </div>
       </footer>
