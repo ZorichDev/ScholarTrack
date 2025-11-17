@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
 import { GraduationCap, Calculator, Globe, MessageCircle, CheckCircle, ArrowRight, Mail, Phone, User, BookOpen, MapPin, Award, TrendingUp, Users, Clock, Star, Shield, Zap, Target } from 'lucide-react';
 
+
+
 // CONFIGURATION CONSTANTS
 const CONFIG = {
   email: {
-    recipient: "custormercare@rprogroup.net",
+    recipient: "rproabroad@gmail.com",
     cc: "admin@rprogroup.com",
-    serviceId: "service_ptzp7rd",
-    templateId: "template_rjb0396",
-    publicKey: "3PD5AyCly9DCyS4u1"
+    serviceId: "service_mo8seem",
+    templateId: "template_r4uq0ss",
+    publicKey: "Up6FIG6PmarV3vHYk"
   },
   tawk: {
     propertyId: "68e39551914f071953b2ca10",
@@ -101,19 +103,16 @@ const STATS = [
 const TESTIMONIALS = [
   {
     name: 'Adebayo Johnson',
-    program: 'Masters in Computer Science, Canada',
     text: 'R-Pro made my dream of studying in Canada a reality. Their guidance was invaluable throughout the entire process.',
     rating: 5
   },
   {
     name: 'Chioma Okafor',
-    program: 'MBA, United Kingdom',
     text: 'Professional, knowledgeable, and always available. I got admission to my top choice university thanks to R-Pro!',
-    rating: 5
+    rating: 4
   },
   {
     name: 'Emmanuel Nwosu',
-    program: 'Data Science, Australia',
     text: 'The eligibility checker helped me understand my options clearly. The team went above and beyond to help with my application.',
     rating: 5
   }
@@ -473,11 +472,11 @@ export default function ScholarTrack() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-      <header className="bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 shadow-xl sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-500 to-purple-50 ">
+      <header className="bg-gradient-to-r from-red-900 via-purple-900 to-indigo-950 shadow-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-5 flex items-center justify-between">
           <div className="flex items-center space-x-2 md:space-x-3">
-            <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-9 h-9 md:w-10 md:h-10  bg-gradient-to-r from-red-600 to-red-800 rounded-xl flex items-center justify-center shadow-lg">
               <img src={logo} alt="logo" className="w-5 md:w-6 md:h-6 object-contain"/>
             </div>
             <div>
