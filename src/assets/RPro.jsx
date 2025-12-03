@@ -208,52 +208,98 @@ const getEligiblePrograms = (normalizedCgpa, country) => {
   };
 };
 
-// EMAILJS SERVICE FUNCTION
+// EMAILJS SERVICE FUNCTION - CORRECTED
 const sendEmailNotification = async (data) => {
   try {
-    if (!window.emailjs) {
-      console.error('EmailJS not loaded yet');
-      return false;
+    console.log('📧 Starting email sending process...');
+    
+    // Check if EmailJS is loaded
+    if (!window.emailjs || typeof window.emailjs.send !== 'function') {
+      console.error('❌ EmailJS not loaded');
+      
+      // Try to load it again
+      try {
+        const emailJSModule = await import('@emailjs/browser');
+        window.emailjs = emailJSModule.default || emailJSModule;
+        window.emailjs.init(CONFIG.email.publicKey);
+        console.log('✅ EmailJS loaded dynamically');
+      } catch (loadError) {
+        console.error('❌ Failed to load EmailJS:', loadError);
+        alert('⚠️ Email service is currently unavailable. Please contact us directly.');
+        return false;
+      }
     }
 
+    console.log('✅ EmailJS is ready');
+
+    // Format eligible programs text
     const eligibleProgramsText = data.eligible.programs.length > 0 
       ? data.eligible.programs.map((p, index) => 
           `${index + 1}. ${p.program} - ${p.desc} (Min CGPA: ${p.min}/5.0)`
         ).join('\n')
       : 'No eligible programs found. Student needs counseling for alternative pathways.';
 
+    // Prepare template parameters
     const templateParams = {
       to_email: CONFIG.email.recipient,
-      cc_email: CONFIG.email.cc,
       student_name: data.studentInfo.fullName,
       student_email: data.studentInfo.email,
       student_phone: data.studentInfo.phone || 'Not provided',
       current_level: data.studentInfo.currentLevel || 'Not provided',
       field_of_study: data.studentInfo.fieldOfStudy || 'Not provided',
-      original_cgpa: data.cgpa,
-      grading_scale: data.gradingScale,
-      normalized_cgpa: data.normalizedCgpa,
+      original_cgpa: String(data.cgpa),
+      grading_scale: String(data.gradingScale),
+      normalized_cgpa: String(data.normalizedCgpa),
       degree_class: data.eligible.degreeClass.description,
       equivalent_scale: data.eligible.degreeClass.equivalent,
       destination: data.country,
       eligible_programs: eligibleProgramsText,
-      total_eligible: data.eligible.programs.length,
+      total_eligible: String(data.eligible.programs.length),
       timestamp: data.timestamp,
-      message: `New student eligibility check completed for ${data.studentInfo.fullName}.`,
-      subject: `R-Pro ScholarTrack - Eligibility Results for ${data.studentInfo.fullName}`
+      message: `New student eligibility check completed for ${data.studentInfo.fullName}.`
     };
 
+    console.log('📧 Template Parameters:', templateParams);
+    console.log('📧 Service ID:', CONFIG.email.serviceId);
+    console.log('📧 Template ID:', CONFIG.email.templateId);
+    console.log('📧 Public Key:', CONFIG.email.publicKey);
+
+    // Send email
     const response = await window.emailjs.send(
       CONFIG.email.serviceId,
       CONFIG.email.templateId,
       templateParams
     );
     
-    console.log('Email sent successfully:', response);
+    console.log('✅ Email sent successfully!', response);
     return true;
     
   } catch (error) {
-    console.error('EmailJS failed to send:', error);
+    console.error('❌ EmailJS Error:', {
+      message: error.message,
+      text: error.text,
+      status: error.status,
+      fullError: error
+    });
+    
+    // Provide helpful error messages
+    let errorMessage = '❌ Failed to send email notification. ';
+    
+    if (error.status === 400) {
+      errorMessage += 'Configuration error. Please check Service ID and Template ID.';
+    } else if (error.status === 401 || error.status === 403) {
+      errorMessage += 'Authentication failed. Please check your Public Key.';
+    } else if (error.status === 404) {
+      errorMessage += 'Template or Service not found.';
+    } else if (error.message?.includes('Network Error')) {
+      errorMessage += 'Network error. Please check your internet connection.';
+    } else {
+      errorMessage += 'Technical issue. Your results are displayed above.';
+    }
+    
+    console.error('Error details:', error);
+    alert(errorMessage);
+    
     return false;
   }
 };
@@ -382,11 +428,13 @@ export default function ScholarTrack() {
       if (!window.emailjs) {
         try {
           const emailJSModule = await import('@emailjs/browser');
-          window.emailjs = emailJSModule;
+          window.emailjs = emailJSModule.default || emailJSModule;
+          
+          console.log('EmailJS loaded:', window.emailjs);
           
           if (CONFIG.email.publicKey) {
             window.emailjs.init(CONFIG.email.publicKey);
-            console.log('EmailJS initialized successfully');
+            console.log('EmailJS initialized with key:', CONFIG.email.publicKey);
           }
         } catch (error) {
           console.error('Failed to load EmailJS:', error);
@@ -438,6 +486,13 @@ export default function ScholarTrack() {
 
       setResults(resultData);
       setActiveTab('results');
+      
+      console.log('📋 Result data prepared:', resultData);
+      
+      // Test EmailJS before sending
+      console.log('Testing EmailJS availability...');
+      console.log('window.emailjs exists:', !!window.emailjs);
+      console.log('window.emailjs.send exists:', window.emailjs?.send ? 'Yes' : 'No');
       
       await sendNotification(resultData);
     } catch (error) {
